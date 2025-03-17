@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
 
         if (InputManager.GetJumpInput())
         {
-            lastJumpInputTime = Time.time; 
+            lastJumpInputTime = Time.time;
         }
 
         HandleJump();
@@ -52,6 +52,9 @@ public class Player : MonoBehaviour
         HandleMovement();
     }
 
+    /// <summary>
+    /// Controls horizontal movement using linear velocity
+    /// </summary>
     private void HandleMovement()
     {
         Vector2 newVelocity = rb.linearVelocity;
@@ -68,6 +71,9 @@ public class Player : MonoBehaviour
         rb.linearVelocity = newVelocity;
     }
 
+    /// <summary>
+    /// Handles jump logic, including jump buffering, coyote time, and variable jump height.
+    /// </summary>
     private void HandleJump()
     {
         if (isGrounded)
@@ -85,7 +91,7 @@ public class Player : MonoBehaviour
             lastJumpInputTime = 0; // Reset jump buffer
         }
 
-        //Variable Jump Height
+        // Variable Jump Height controlled by variable gravity
         if (rb.linearVelocity.y > 0) //rising
         {
             if (InputManager.GetJumpHeld() && (Time.time - jumpStartTime <= maxJumpTime))//holding jump
@@ -99,11 +105,13 @@ public class Player : MonoBehaviour
         }
         else // Falling
         {
-            
             rb.gravityScale = fallGravityMultiplier;
         }
     }
 
+    /// <summary>
+    /// Executes the jump by setting vertical velocity and tracking jump start time
+    /// </summary>
     private void Jump() //execute jump
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
