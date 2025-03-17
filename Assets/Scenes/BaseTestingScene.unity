@@ -1173,10 +1173,10 @@ MonoBehaviour:
   holdJumpGravity: 1
   fallGravityMultiplier: 6
   lowJumpGravity: 6
-  coyoteTime: 0.1
+  coyoteTime: 0.11
   jumpBufferTime: 0.15
   maxJumpTime: 0.2
-  groundCheckDistance: 0.55
+  collisionRadius: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
