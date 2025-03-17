@@ -24,13 +24,21 @@ public class Player : MonoBehaviour
     private float lastJumpInputTime; // track time since jump input
     private float jumpStartTime; // track when jump started
 
-    [Header("Raycast Settings")]
-    public float groundCheckDistance = 0.1f;
+    [Header("Ground Detections")]
+    public float collisionRadius = 0.2f;
     public LayerMask groundLayer;
+
+    private BoxCollider2D boxCollider;
+    public Vector2 bottomOffset; // = new Vector2(0, -0.5f);
+
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+
+        // set the bottom offset based on the player's collider
+        bottomOffset = new Vector2(0, -boxCollider.bounds.extents.y - 0.05f);
         rb.gravityScale = 5f; // default gravity
     }
 
@@ -119,10 +127,13 @@ public class Player : MonoBehaviour
         jumpStartTime = Time.time; // Record jump start time
     }
 
+    /// <summary>
+    /// Checks if the player is currently touching the ground every frame.
+    /// An overlap circle at the player's feet check for any collision with the ground layer
+    /// </summary>
     private void CheckGrounded()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
-        isGrounded = hit.collider != null;
+        isGrounded = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
 
         if (isGrounded && rb.linearVelocity.y <= 0)
         {
@@ -130,9 +141,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Debugging method to visualize OverlapCircle
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+        Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
     }
 }
