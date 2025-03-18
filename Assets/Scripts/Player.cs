@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
 
     [Header("Wall properties")]
     public float slideSpeed = 5f;
+    public float wallPush = 8f;
 
     private void Awake()
     {
@@ -116,7 +118,7 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// Executes the jump by setting vertical velocity and tracking jump start time
+    /// Executes the jump by settig vertical velocity and tracking jump start time
     /// </summary>
     private void Jump() //execute jump
     {
@@ -152,5 +154,11 @@ public class Player : MonoBehaviour
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slideSpeed);
             }
         }
+    }
+
+    private void WallJump()
+    {
+        Vector2 wallDir = collision.rightWalled ? Vector2.left : Vector2.right;
+
     }
 }
