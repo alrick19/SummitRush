@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -18,34 +19,33 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rb;
     private float moveInput;
-    private bool isGrounded;
     private bool isJumping;
     private float lastGroundedTime; // track time since last grounded
     private float lastJumpInputTime; // track time since jump input
     private float jumpStartTime; // track when jump started
 
-    [Header("Ground Detections")]
-    public float collisionRadius = 0.2f;
-    public LayerMask groundLayer;
+    private Collision collision;
 
-    private BoxCollider2D boxCollider;
-    public Vector2 bottomOffset; // = new Vector2(0, -0.5f);
 
+    [Header("Wall properties")]
+    public float slideSpeed = 5f;
+    public float wallPush = 8f;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        collision = GetComponent<Collision>();
 
-        // set the bottom offset based on the player's collider
-        bottomOffset = new Vector2(0, -boxCollider.bounds.extents.y - 0.05f);
-        rb.gravityScale = 5f; // default gravity
+        rb.gravityScale = fallGravityMultiplier; // default gravity
     }
 
     private void Update()
     {
         moveInput = InputManager.GetMoveInput();
         CheckGrounded();
+
+
+        HandleWalled();
 
         if (InputManager.GetJumpInput())
         {
@@ -84,13 +84,13 @@ public class Player : MonoBehaviour
     /// </summary>
     private void HandleJump()
     {
-        if (isGrounded)
+        if (collision.isGrounded)
         {
             lastGroundedTime = Time.time;
             isJumping = false; // Reset jumping state
         }
 
-        bool canJump = (Time.time - lastGroundedTime <= coyoteTime) || isGrounded; // check within coyotetime
+        bool canJump = (Time.time - lastGroundedTime <= coyoteTime) || collision.isGrounded; // check within coyotetime
         bool bufferedJump = Time.time - lastJumpInputTime <= jumpBufferTime; // check for within buffer time
 
         if (bufferedJump && canJump && !isJumping)
@@ -111,14 +111,14 @@ public class Player : MonoBehaviour
                 rb.gravityScale = lowJumpGravity;
             }
         }
-        else // Falling
+        else if (!collision.isWalled)// Falling
         {
             rb.gravityScale = fallGravityMultiplier;
         }
     }
 
     /// <summary>
-    /// Executes the jump by setting vertical velocity and tracking jump start time
+    /// Executes the jump by settig vertical velocity and tracking jump start time
     /// </summary>
     private void Jump() //execute jump
     {
@@ -133,18 +133,32 @@ public class Player : MonoBehaviour
     /// </summary>
     private void CheckGrounded()
     {
-        isGrounded = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
-
-        if (isGrounded && rb.linearVelocity.y <= 0)
+        if (collision.isGrounded && rb.linearVelocity.y <= 0)
         {
             isJumping = false; // Reset jumping state when grounded
         }
     }
 
-    // Debugging method to visualize OverlapCircle
-    private void OnDrawGizmos()
+    private void HandleWalled()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
+        if (!collision.isGrounded && collision.isWalled)
+        {
+            if (InputManager.GetWallGrab())
+            {
+                rb.gravityScale = 0f;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+            }
+            else
+            {
+                // rb.gravityScale = fallGravityMultiplier;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slideSpeed);
+            }
+        }
+    }
+
+    private void WallJump()
+    {
+        Vector2 wallDir = collision.rightWalled ? Vector2.left : Vector2.right;
+
     }
 }

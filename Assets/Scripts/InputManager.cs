@@ -21,4 +21,9 @@ public static class InputManager
     {
         return Input.GetKeyUp(KeyCode.Space); // Detects jump release
     }
+
+    public static bool GetWallGrab()
+    {
+        return Input.GetKey(KeyCode.LeftShift); // Detects Wall Grab Hold
+    }
 }
