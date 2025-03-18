@@ -186,13 +186,12 @@ MonoBehaviour:
   acceleration: 500
   jumpForce: 13
   holdJumpGravity: 1
-  fallGravityMultiplier: 6
-  lowJumpGravity: 6
+  baseGravity: 5
   coyoteTime: 0.11
   jumpBufferTime: 0.15
   maxJumpTime: 0.2
   slideSpeed: 5
-  wallPush: 8
+  wallForce: 8
 --- !u!70 &3346169528522036503
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

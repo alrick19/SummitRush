@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Data;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -78,6 +79,7 @@ public class Player : MonoBehaviour
         if (isGrabbing)
         {
             Debug.Log("Zero gravity");
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
             rb.gravityScale = ZERO_GRAVITY;
         }
         else
