@@ -17,8 +17,10 @@ public class Player : MonoBehaviour
     public float maxJumpTime = 0.2f; // maax time jump is influenced by holding button
 
     private Rigidbody2D rb;
+    private float regularGravity;
     private float moveInput;
     private bool isGrounded;
+    public bool isWalled;
     private bool isJumping;
     private float lastGroundedTime; // track time since last grounded
     private float lastJumpInputTime; // track time since jump input
@@ -28,24 +30,41 @@ public class Player : MonoBehaviour
     public float collisionRadius = 0.2f;
     public LayerMask groundLayer;
 
-    private BoxCollider2D boxCollider;
-    public Vector2 bottomOffset; // = new Vector2(0, -0.5f);
+    private CapsuleCollider2D playerCollider;
+    private Vector2 bottomOffset; // = new Vector2(0, -0.5f);
+    private Vector2 leftOffset;
+    private Vector2 rightOffset;
+
+    [Header("Wall properties")]
+    public float slideSpeed = 5f;
+
 
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        rb.gravityScale = fallGravityMultiplier; // default gravity
 
-        // set the bottom offset based on the player's collider
-        bottomOffset = new Vector2(0, -boxCollider.bounds.extents.y - 0.05f);
-        rb.gravityScale = 5f; // default gravity
+        playerCollider = GetComponent<CapsuleCollider2D>();
+        bottomOffset = new Vector2(0, -playerCollider.bounds.extents.y);
+
+
+        float width = playerCollider.bounds.extents.x; // Half width of the collider
+        float height = playerCollider.bounds.extents.y * 0.5f; // Middle of the collider
+
+        leftOffset = new Vector2(-width - 0.05f, height * 0.5f);
+        rightOffset = new Vector2(width + 0.05f, height * 0.5f);
+
     }
 
     private void Update()
     {
         moveInput = InputManager.GetMoveInput();
         CheckGrounded();
+        CheckWalled();
+
+
+        HandleWalled();
 
         if (InputManager.GetJumpInput())
         {
@@ -111,7 +130,7 @@ public class Player : MonoBehaviour
                 rb.gravityScale = lowJumpGravity;
             }
         }
-        else // Falling
+        else if (!isWalled)// Falling
         {
             rb.gravityScale = fallGravityMultiplier;
         }
@@ -141,10 +160,34 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void CheckWalled()
+    {
+        isWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, groundLayer) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, groundLayer);
+    }
+
+    private void HandleWalled()
+    {
+        if (!isGrounded && isWalled)
+        {
+            if (InputManager.GetWallGrab())
+            {
+                rb.gravityScale = 0f;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+            }
+            else
+            {
+                // rb.gravityScale = fallGravityMultiplier;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slideSpeed);
+            }
+        }
+    }
+
     // Debugging method to visualize OverlapCircle
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
     }
 }
