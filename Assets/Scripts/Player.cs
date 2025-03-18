@@ -17,51 +17,30 @@ public class Player : MonoBehaviour
     public float maxJumpTime = 0.2f; // maax time jump is influenced by holding button
 
     private Rigidbody2D rb;
-    private float regularGravity;
     private float moveInput;
-    private bool isGrounded;
-    public bool isWalled;
     private bool isJumping;
     private float lastGroundedTime; // track time since last grounded
     private float lastJumpInputTime; // track time since jump input
     private float jumpStartTime; // track when jump started
 
-    [Header("Ground Detections")]
-    public float collisionRadius = 0.2f;
-    public LayerMask groundLayer;
+    private Collision collision;
 
-    private CapsuleCollider2D playerCollider;
-    private Vector2 bottomOffset; // = new Vector2(0, -0.5f);
-    private Vector2 leftOffset;
-    private Vector2 rightOffset;
 
     [Header("Wall properties")]
     public float slideSpeed = 5f;
 
-
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        collision = GetComponent<Collision>();
+
         rb.gravityScale = fallGravityMultiplier; // default gravity
-
-        playerCollider = GetComponent<CapsuleCollider2D>();
-        bottomOffset = new Vector2(0, -playerCollider.bounds.extents.y);
-
-
-        float width = playerCollider.bounds.extents.x; // Half width of the collider
-        float height = playerCollider.bounds.extents.y * 0.5f; // Middle of the collider
-
-        leftOffset = new Vector2(-width - 0.05f, height * 0.5f);
-        rightOffset = new Vector2(width + 0.05f, height * 0.5f);
-
     }
 
     private void Update()
     {
         moveInput = InputManager.GetMoveInput();
         CheckGrounded();
-        CheckWalled();
 
 
         HandleWalled();
@@ -103,13 +82,13 @@ public class Player : MonoBehaviour
     /// </summary>
     private void HandleJump()
     {
-        if (isGrounded)
+        if (collision.isGrounded)
         {
             lastGroundedTime = Time.time;
             isJumping = false; // Reset jumping state
         }
 
-        bool canJump = (Time.time - lastGroundedTime <= coyoteTime) || isGrounded; // check within coyotetime
+        bool canJump = (Time.time - lastGroundedTime <= coyoteTime) || collision.isGrounded; // check within coyotetime
         bool bufferedJump = Time.time - lastJumpInputTime <= jumpBufferTime; // check for within buffer time
 
         if (bufferedJump && canJump && !isJumping)
@@ -130,7 +109,7 @@ public class Player : MonoBehaviour
                 rb.gravityScale = lowJumpGravity;
             }
         }
-        else if (!isWalled)// Falling
+        else if (!collision.isWalled)// Falling
         {
             rb.gravityScale = fallGravityMultiplier;
         }
@@ -152,22 +131,15 @@ public class Player : MonoBehaviour
     /// </summary>
     private void CheckGrounded()
     {
-        isGrounded = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
-
-        if (isGrounded && rb.linearVelocity.y <= 0)
+        if (collision.isGrounded && rb.linearVelocity.y <= 0)
         {
             isJumping = false; // Reset jumping state when grounded
         }
     }
 
-    private void CheckWalled()
-    {
-        isWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, groundLayer) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, groundLayer);
-    }
-
     private void HandleWalled()
     {
-        if (!isGrounded && isWalled)
+        if (!collision.isGrounded && collision.isWalled)
         {
             if (InputManager.GetWallGrab())
             {
@@ -180,14 +152,5 @@ public class Player : MonoBehaviour
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slideSpeed);
             }
         }
-    }
-
-    // Debugging method to visualize OverlapCircle
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
-        Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
-        Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
     }
 }
