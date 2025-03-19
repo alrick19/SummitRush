@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Data;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -22,7 +21,8 @@ public class Player : MonoBehaviour
     private const float ZERO_GRAVITY = 0f;
 
     private Rigidbody2D rb;
-    private float moveInput;
+    private float horizontalMove;
+    private float verticalMove;
     private bool isJumping;
     private float lastGroundedTime; // track time since last grounded
     private float lastJumpInputTime; // track time since jump input
@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
 
     [Header("Wall properties")]
     public float slideSpeed = 5f;
+    public float climbSpeed = 6f;
     public float wallForce = 8f;
 
     private bool isGrabbing;
@@ -49,7 +50,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        moveInput = InputManager.GetMoveInput();
+        horizontalMove = InputManager.GetHorizontal();
+        verticalMove = InputManager.GetVertical();
 
         StateChecks();
     }
@@ -78,9 +80,7 @@ public class Player : MonoBehaviour
 
         if (isGrabbing)
         {
-            Debug.Log("Zero gravity");
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-            rb.gravityScale = ZERO_GRAVITY;
+            WallGrab();
         }
         else
         {
@@ -90,11 +90,12 @@ public class Player : MonoBehaviour
         if (collision.isWalled && !collision.isGrounded)
         {
             // if the player isn't moving and wall grabbing
-            if (InputManager.GetMoveInput() != 0 && !isGrabbing)
+            if (horizontalMove != 0 && !isGrabbing)
             {
                 isSliding = true;
                 WallSlide();
             }
+            // if the player is jumping from a wall
             if (InputManager.GetJumpInput())
             {
                 WallJump();
@@ -118,8 +119,32 @@ public class Player : MonoBehaviour
 
     private void WallSlide()
     {
+        if (!canMove)
+            return;
+
+        float pushForce;
+
+        // prevents unwanted horizontal motion that could cancel out upward force from the wall jump.
+        if ((rb.linearVelocity.x > 0 && collision.rightWalled) || (rb.linearVelocity.x < 0 && collision.leftWalled))
+        {
+            pushForce = 0; // no push when sliding down
+        }
+        else
+        {
+            pushForce = rb.linearVelocity.x; // preserve momentum otherwise
+        }
         if (isSliding /* && !collision.isGrounded */)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slideSpeed);
+            rb.linearVelocity = new Vector2(pushForce, -slideSpeed);
+    }
+
+    private void WallGrab()
+    {
+        rb.gravityScale = ZERO_GRAVITY;
+
+        // Prevents character from keeping y momentum while grabbing
+        // if the player pushes against the wall while grabbing, we want to remove any unwanted downard momentum.
+        if (!wallJumped)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, verticalMove * climbSpeed);
     }
 
     private void BetterJump()
@@ -140,11 +165,6 @@ public class Player : MonoBehaviour
         {
             rb.gravityScale = holdJumpGravity;
         }
-        // else
-        // {
-        //     rb.gravityScale = baseGravity;
-        // }
-
     }
 
     /// <summary>
@@ -152,7 +172,6 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump() //execute jump
     {
-        Debug.Log("Jumping");
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
         jumpStartTime = Time.time; // Record jump start time
@@ -168,12 +187,14 @@ public class Player : MonoBehaviour
         StartCoroutine(DisableMovement(0.2f));
 
         Vector2 wallDir = collision.rightWalled ? Vector2.left : Vector2.right;
-        Vector2 jumpDir = (Vector2.up + wallDir) * wallForce;
+        Vector2 jumpDir = new Vector2(wallDir.x * wallForce, wallForce);
 
-        rb.linearVelocity = new Vector2(jumpDir.x, wallForce);
+        rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = jumpDir;
         jumpStartTime = Time.time;
 
-        wallJumped = true;
+        // sets wall Jumped to true then false after .2s
+        StartCoroutine(WallJumpingTime(0.3f));
     }
 
     /// <summary>
@@ -189,13 +210,13 @@ public class Player : MonoBehaviour
 
         Vector2 newVelocity = rb.linearVelocity;
 
-        if (Mathf.Abs(moveInput) > 0.01f)
+        if (Mathf.Abs(horizontalMove) > 0.01f)
         {
-            newVelocity.x = Mathf.MoveTowards(newVelocity.x, moveInput * moveSpeed, acceleration * Time.fixedDeltaTime);
+            newVelocity.x = Mathf.MoveTowards(newVelocity.x, horizontalMove * moveSpeed, acceleration * Time.fixedDeltaTime);
         }
         else if (wallJumped)
         {
-            newVelocity = Vector2.Lerp(newVelocity, new Vector2(moveInput * moveSpeed, newVelocity.y), .5f * Time.deltaTime);
+            newVelocity = Vector2.Lerp(newVelocity, new Vector2(horizontalMove * moveSpeed, newVelocity.y), .5f * Time.deltaTime);
         }
         else // NO SLIDING
         {
@@ -222,6 +243,13 @@ public class Player : MonoBehaviour
         canMove = false;
         yield return new WaitForSeconds(time);
         canMove = true;
+    }
+
+    IEnumerator WallJumpingTime(float time)
+    {
+        wallJumped = true;
+        yield return new WaitForSeconds(time);
+        wallJumped = false;
     }
 
 }
