@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Data;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -78,9 +77,14 @@ public class Player : MonoBehaviour
 
         if (isGrabbing)
         {
-            Debug.Log("Zero gravity");
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
             rb.gravityScale = ZERO_GRAVITY;
+
+            // Prevents character from keeping y momentum while grabbing
+            // if the player pushes against the wall while grabbing, we want to remove any unwanted downard momentum.
+            if (moveInput > .1f || moveInput < -.1f)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+            }
         }
         else
         {
@@ -95,6 +99,7 @@ public class Player : MonoBehaviour
                 isSliding = true;
                 WallSlide();
             }
+            // if the player is jumping from a wall
             if (InputManager.GetJumpInput())
             {
                 WallJump();
@@ -118,8 +123,22 @@ public class Player : MonoBehaviour
 
     private void WallSlide()
     {
+        if (!canMove)
+            return;
+
+        float pushForce;
+
+        // prevents unwanted horizontal motion that could cancel out upward force from the wall jump.
+        if ((rb.linearVelocity.x > 0 && collision.rightWalled) || (rb.linearVelocity.x < 0 && collision.leftWalled))
+        {
+            pushForce = 0; // no push when sliding down
+        }
+        else
+        {
+            pushForce = rb.linearVelocity.x; // preserve momentum otherwise
+        }
         if (isSliding /* && !collision.isGrounded */)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slideSpeed);
+            rb.linearVelocity = new Vector2(pushForce, -slideSpeed);
     }
 
     private void BetterJump()
@@ -140,11 +159,6 @@ public class Player : MonoBehaviour
         {
             rb.gravityScale = holdJumpGravity;
         }
-        // else
-        // {
-        //     rb.gravityScale = baseGravity;
-        // }
-
     }
 
     /// <summary>
@@ -152,7 +166,6 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump() //execute jump
     {
-        Debug.Log("Jumping");
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
         jumpStartTime = Time.time; // Record jump start time
@@ -168,9 +181,10 @@ public class Player : MonoBehaviour
         StartCoroutine(DisableMovement(0.2f));
 
         Vector2 wallDir = collision.rightWalled ? Vector2.left : Vector2.right;
-        Vector2 jumpDir = (Vector2.up + wallDir) * wallForce;
+        Vector2 jumpDir = new Vector2(wallDir.x * wallForce, wallForce);
 
-        rb.linearVelocity = new Vector2(jumpDir.x, wallForce);
+        rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = jumpDir;
         jumpStartTime = Time.time;
 
         wallJumped = true;
