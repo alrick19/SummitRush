@@ -143,15 +143,8 @@ public class Player : MonoBehaviour
 
         // Prevents character from keeping y momentum while grabbing
         // if the player pushes against the wall while grabbing, we want to remove any unwanted downard momentum.
-        // if (horizontalMove > .1f || horizontalMove < -.1f)
-        // {
-        //     rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-        // }
-        // if (verticalMove != 0)
-        // {
         if (!wallJumped)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, verticalMove * climbSpeed);
-        // }
     }
 
     private void BetterJump()
