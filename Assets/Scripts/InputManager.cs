@@ -2,9 +2,14 @@ using UnityEngine;
 
 public static class InputManager
 {
-    public static float GetMoveInput()
+    public static float GetHorizontal()
     {
         return Input.GetAxisRaw("Horizontal"); // -1 (left), 1 (right), or 0 (idle)
+    }
+
+    public static float GetVertical()
+    {
+        return Input.GetAxisRaw("Vertical"); // - 1 (down), 1 (up), or 0 (idle)
     }
 
     public static bool GetJumpInput()
