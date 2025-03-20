@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerMovementTracker : SingletonMonoBehavior<PlayerMovementTracker>
 {
     private Transform playerPrefab; 
-    [SerializeField] private float delayTime = 3f; // Time delay in seconds
+    [SerializeField] private float delayTime = 1.5f; // Time delay in seconds
 
     private Queue<(Vector2 position, float timeStamp)> movementHistory = new Queue<(Vector2, float)>();
 
@@ -53,10 +53,6 @@ public class PlayerMovementTracker : SingletonMonoBehavior<PlayerMovementTracker
         if (player != null)
         {
             playerPrefab = player.transform;
-        }
-        else
-        {
-            Debug.LogWarning("PlayerMovementTracker: No Player found in the scene.");
         }
     }
 
