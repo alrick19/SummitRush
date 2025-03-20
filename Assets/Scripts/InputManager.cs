@@ -31,4 +31,9 @@ public static class InputManager
     {
         return Input.GetKey(KeyCode.LeftShift); // Detects Wall Grab Hold
     }
+
+    public static bool GetDash()
+    {
+        return Input.GetKey(KeyCode.Mouse0);
+    }
 }
