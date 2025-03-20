@@ -1415,11 +1415,6 @@ Transform:
   - {fileID: 1667288014}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1253305071 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5230413749844868566, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
-  m_PrefabInstance: {fileID: 5618358866104547417}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1269698393
 GameObject:
   m_ObjectHideFlags: 0
@@ -5541,6 +5536,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1734016469}
     m_Modifications:
+    - target: {fileID: 852437088061790754, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
+      propertyPath: pointA
+      value: 
+      objectReference: {fileID: 79437040}
+    - target: {fileID: 852437088061790754, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
+      propertyPath: pointB
+      value: 
+      objectReference: {fileID: 1313098207}
+    - target: {fileID: 3151807048086490121, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 52279904}
     - target: {fileID: 5230413749844868566, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -5588,48 +5595,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5230413749844868566, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5618358866104547419}
-    - targetCorrespondingSourceObject: {fileID: 5230413749844868566, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5618358866104547424}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
 --- !u!4 &5618358866104547418 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9077098099169852022, guid: 4358a9e9d840346eebe5876a7fe480ed, type: 3}
   m_PrefabInstance: {fileID: 5618358866104547417}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5618358866104547419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1253305071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da3ee2f4c39cb478090ad3cbdebc9e83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointA: {fileID: 79437040}
-  pointB: {fileID: 1313098207}
-  speed: 2
---- !u!114 &5618358866104547424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1253305071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a23bf544baa52473b86b97a7f15d96e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 6338114073344834139, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
-  respawnPoint: {fileID: 52279904}
 --- !u!1001 &7260469070986610707
 PrefabInstance:
   m_ObjectHideFlags: 0
