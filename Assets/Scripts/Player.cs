@@ -23,15 +23,14 @@ public class Player : MonoBehaviour
 
     [Space]
     [Header("Dashing Attributes")]
-    private float xDash;
-    private float yDash;
-    public float dashSpeed = 25f;
+    public float dashSpeed = 65f;
+    public float dashAirDrag = 14f;
 
     [Space]
     [Header("Gravity Attributes")]
-    private const float ZERO_GRAVITY = 0f;
     public float holdJumpGravity = 1f; // less gravity while holding jump (for higher jump)
     public float baseGravity = 6f; // stronger gravity when falling
+    private const float ZERO_GRAVITY = 0f;
 
 
     [Space]
@@ -279,12 +278,16 @@ public class Player : MonoBehaviour
         wallJumped = true;
         isDashing = true;
 
-        rb.gravityScale = 0f;
+        // zero gravity for the dash to be linear
+        rb.gravityScale = ZERO_GRAVITY;
+        // air drag for the dash to feel fast but not long (distance)
+        rb.linearDamping = dashAirDrag;
 
         yield return new WaitForSeconds(time);
 
+        // set everything back to base after dash timing
         rb.gravityScale = baseGravity;
-
+        rb.linearDamping = 0;
         wallJumped = false;
         isDashing = false;
     }
@@ -296,6 +299,7 @@ public class Player : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         Vector2 dir = new Vector2(xDir, yDir);
         Debug.Log(dir);
+        // set Dashing Velocity
         rb.linearVelocity += dir.normalized * dashSpeed;
         StartCoroutine(DashTime(0.3f));
     }
