@@ -4,41 +4,55 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
-    [Header("Movement Settings")]
+    private Rigidbody2D rb;
+    private Collision collision;
+
+    [Header("Movement Stats")]
     public float moveSpeed = 10f; // max speed
     public float acceleration = 50f;
 
-    private bool canMove = true;
-
-    [Header("Jump Settings")]
+    [Space]
+    [Header("Jump Stats")]
     public float jumpForce = 13f;
-    public float holdJumpGravity = 1f; // less gravity while holding jump (for higher jump)
-    public float baseGravity = 6f; // stronger gravity when falling
     public float coyoteTime = 0.1f; // grace period for jumping after going over ledge
     public float jumpBufferTime = 0.15f; // grace period for jump input before landing
     public float maxJumpTime = 0.2f; // maax time jump is influenced by holding button
-
-    private const float ZERO_GRAVITY = 0f;
-
-    private Rigidbody2D rb;
-    private float horizontalMove;
-    private float verticalMove;
-    private bool isJumping;
     private float lastGroundedTime; // track time since last grounded
     private float lastJumpInputTime; // track time since jump input
     private float jumpStartTime; // track when jump started
 
-    private Collision collision;
+    [Space]
+    [Header("Dashing Attributes")]
+    public float dashSpeed = 65f;
+    public float dashAirDrag = 14f;
+
+    [Space]
+    [Header("Gravity Attributes")]
+    public float holdJumpGravity = 1f; // less gravity while holding jump (for higher jump)
+    public float baseGravity = 6f; // stronger gravity when falling
+    private const float ZERO_GRAVITY = 0f;
+
+
+    [Space]
+    [Header("Status booleans")]
+    private bool canMove = true;
+    private bool isGrabbing;
+    private bool isSliding;
+    private bool wallJumped;
+    private bool isJumping;
+    private bool isDashing;
+    private bool hasDashed;
+
+    [Space]
+    [Header("Movement Input")]
+    private float horizontalMove;
+    private float verticalMove;
 
 
     [Header("Wall properties")]
     public float slideSpeed = 5f;
     public float climbSpeed = 6f;
     public float wallForce = 8f;
-
-    private bool isGrabbing;
-    private bool isSliding;
-    private bool wallJumped;
 
     private void Awake()
     {
@@ -71,14 +85,15 @@ public class Player : MonoBehaviour
             isSliding = false;
         }
 
-        if (collision.isGrounded)
+        if (collision.isGrounded && !isDashing)
         {
             lastGroundedTime = Time.time;
             isJumping = false;
             wallJumped = false;
+            hasDashed = false;
         }
 
-        if (isGrabbing)
+        if (isGrabbing && !isDashing)
         {
             WallGrab();
         }
@@ -113,6 +128,12 @@ public class Player : MonoBehaviour
             lastJumpInputTime = Time.time;
         }
         BetterJump();
+
+        if (InputManager.GetDash() && !hasDashed)
+        {
+            Debug.Log("Testing");
+            Dash(horizontalMove, verticalMove);
+        }
 
         CheckGrounded();
     }
@@ -161,7 +182,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (rb.linearVelocity.y > 0 && InputManager.GetJumpHeld() && Time.time - jumpStartTime <= maxJumpTime)
+        if (rb.linearVelocity.y > 0 && InputManager.GetJumpHeld() && Time.time - jumpStartTime <= maxJumpTime && !isDashing)
         {
             rb.gravityScale = holdJumpGravity;
         }
@@ -210,7 +231,7 @@ public class Player : MonoBehaviour
 
         Vector2 newVelocity = rb.linearVelocity;
 
-        if (Mathf.Abs(horizontalMove) > 0.01f)
+        if (Mathf.Abs(horizontalMove) > 0.01f && !isDashing)
         {
             newVelocity.x = Mathf.MoveTowards(newVelocity.x, horizontalMove * moveSpeed, acceleration * Time.fixedDeltaTime);
         }
@@ -250,6 +271,37 @@ public class Player : MonoBehaviour
         wallJumped = true;
         yield return new WaitForSeconds(time);
         wallJumped = false;
+    }
+
+    IEnumerator DashTime(float time)
+    {
+        wallJumped = true;
+        isDashing = true;
+
+        // zero gravity for the dash to be linear
+        rb.gravityScale = ZERO_GRAVITY;
+        // air drag for the dash to feel fast but not long (distance)
+        rb.linearDamping = dashAirDrag;
+
+        yield return new WaitForSeconds(time);
+
+        // set everything back to base after dash timing
+        rb.gravityScale = baseGravity;
+        rb.linearDamping = 0;
+        wallJumped = false;
+        isDashing = false;
+    }
+
+    private void Dash(float xDir, float yDir)
+    {
+        hasDashed = true;
+
+        rb.linearVelocity = Vector2.zero;
+        Vector2 dir = new Vector2(xDir, yDir);
+        Debug.Log(dir);
+        // set Dashing Velocity
+        rb.linearVelocity += dir.normalized * dashSpeed;
+        StartCoroutine(DashTime(0.3f));
     }
 
 }
