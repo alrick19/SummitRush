@@ -5,6 +5,7 @@ public class Collision : MonoBehaviour
     [Header("Collision Variables")]
     public LayerMask groundLayer;
     public float collisionRadius = 0.2f;
+    public float wallCollisionRadius = 0.05f;
 
     [Space]
     public bool isGrounded;
@@ -36,11 +37,11 @@ public class Collision : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
 
         // wall check
-        isWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, groundLayer) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, groundLayer);
+        isWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, wallCollisionRadius, groundLayer) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, wallCollisionRadius, groundLayer);
 
         // positional wall
-        rightWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, collisionRadius, groundLayer);
-        leftWalled = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, groundLayer);
+        rightWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, wallCollisionRadius, groundLayer);
+        leftWalled = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, wallCollisionRadius, groundLayer);
 
     }
 
@@ -51,7 +52,7 @@ public class Collision : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
-        Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, collisionRadius);
-        Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, collisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, wallCollisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, wallCollisionRadius);
     }
 }
