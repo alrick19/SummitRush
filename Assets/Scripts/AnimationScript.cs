@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class AnimationScript : MonoBehaviour
 {
@@ -70,11 +68,13 @@ public class AnimationScript : MonoBehaviour
         var particleDir = runDust.forceOverLifetime.x;
         if (lookingRight)
         {
-            runDust.transform.localPosition = new Vector3(-0.08f, -0.05f, 0);
+            runDust.transform.localPosition = new Vector3(-0.85f, -0.75f, 0);
+            runDust.transform.localEulerAngles = new Vector3(0, 0, 90);
         }
         else
         {
-            runDust.transform.localPosition = new Vector3(0.08f, -0.05f, 0);
+            runDust.transform.localPosition = new Vector3(0.85f, -0.75f, 0);
+            runDust.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
     }
 
