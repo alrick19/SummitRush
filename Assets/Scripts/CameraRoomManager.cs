@@ -1,19 +1,29 @@
 using UnityEngine;
+using Unity.Cinemachine; 
 
 public class CameraRoomManager : MonoBehaviour
 {
-    public GameObject virtualCam;
-    
+    public CinemachineCamera virtualCam; 
+
     private void Start()
     {
-        virtualCam.SetActive(false);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (virtualCam != null && player != null)
+        {
+            virtualCam.gameObject.SetActive(false);
+            virtualCam.Follow = player.transform;
+            virtualCam.LookAt = player.transform;
+        }
+            
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !other.isTrigger)
         {
-            virtualCam.SetActive(true);
+            virtualCam.gameObject.SetActive(true);
+            virtualCam.Follow = other.transform;
+            virtualCam.LookAt = other.transform;
         }
     }
 
@@ -21,7 +31,7 @@ public class CameraRoomManager : MonoBehaviour
     {
         if (other.CompareTag("Player") && !other.isTrigger)
         {
-            virtualCam.SetActive(false);
+            virtualCam.gameObject.SetActive(false);
         }
     }
 }
