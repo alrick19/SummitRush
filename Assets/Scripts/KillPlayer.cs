@@ -1,5 +1,7 @@
 using UnityEngine;
+using Unity.Cinemachine;
 using System.Collections;
+
 
 public class KillPlayer : MonoBehaviour
 {
@@ -45,6 +47,9 @@ public class KillPlayer : MonoBehaviour
         // Update movement tracker with the new player
         PlayerMovementTracker.Instance.SetNewPlayer(newPlayer.transform);
 
+        //update camera tracking
+        UpdateAllCamerasFollowTarget(newPlayer.transform);
+
         // Move Doppelgä=anger and reset tracking
         ResetDoppelganger(respawnPoint, newPlayer.transform);
 
@@ -79,5 +84,16 @@ public class KillPlayer : MonoBehaviour
         {
             shadowDoppelganger.GetComponent<ShadowDoppelganger>().ResetDoppelganger(newPosition, newPlayerTransform);
         }
+    }
+
+    private void UpdateAllCamerasFollowTarget(Transform newTarget)
+    {
+        CinemachineCamera[] allCams = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None);
+
+            foreach (var cam in allCams)
+            {
+                cam.Follow = newTarget;
+                cam.LookAt = newTarget; 
+            }
     }
 }
