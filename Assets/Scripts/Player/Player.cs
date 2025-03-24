@@ -212,8 +212,7 @@ public class Player : MonoBehaviour
     private void Jump() //execute jump
     {
         anim.SetTrigger("Jumping");
-        if (!jumpParticle.isPlaying)
-            jumpParticle.Play();
+        jumpParticle.Play();
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
