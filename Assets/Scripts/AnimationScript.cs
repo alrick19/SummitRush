@@ -8,7 +8,7 @@ public class AnimationScript : MonoBehaviour
     private Animator anim;
     private Player playerMove;
     private Collision coll;
-    private SpriteRenderer sprite;
+    public SpriteRenderer sprite;
     private float verticalVelocity;
 
     void Awake()
@@ -27,6 +27,7 @@ public class AnimationScript : MonoBehaviour
         anim.SetFloat("vertical", Mathf.Abs(playerMove.verticalMove));
         anim.SetBool("isGrabbing", playerMove.isGrabbing);
         anim.SetBool("isDashing", playerMove.isDashing);
+        anim.SetBool("canMove", playerMove.canMove);
 
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
         anim.SetBool("isGrounded", coll.isGrounded);

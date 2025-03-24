@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Collision collision;
-    private AnimationScript animation;
+    private AnimationScript anim;
 
     [Header("Movement Stats")]
     public float moveSpeed = 10f; // max speed
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         collision = GetComponent<Collision>();
-        animation = GetComponentInChildren<AnimationScript>();
+        anim = GetComponentInChildren<AnimationScript>();
 
         rb.gravityScale = baseGravity; // default gravity
     }
@@ -194,7 +194,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump() //execute jump
     {
-        animation.SetTrigger("Jumping");
+        anim.SetTrigger("Jumping");
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
@@ -207,7 +207,7 @@ public class Player : MonoBehaviour
         isGrabbing = false;
         isSliding = false;
 
-        animation.SetTrigger("Jumping");
+        anim.SetTrigger("Jumping");
 
         StopCoroutine(DisableMovement(0));
         StartCoroutine(DisableMovement(0.2f));
@@ -280,6 +280,7 @@ public class Player : MonoBehaviour
 
     IEnumerator DashTime(float time)
     {
+        FindFirstObjectByType<DashTrail>().ShowTrail();
         wallJumped = true;
         isDashing = true;
 
@@ -300,7 +301,7 @@ public class Player : MonoBehaviour
     private void Dash(float xDir, float yDir)
     {
         hasDashed = true;
-        animation.SetTrigger("Dash");
+        anim.SetTrigger("Dash");
 
         rb.linearVelocity = Vector2.zero;
         Vector2 dir = new Vector2(xDir, yDir);
