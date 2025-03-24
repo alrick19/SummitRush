@@ -31,7 +31,9 @@ public class Player : MonoBehaviour
     [Header("Gravity Attributes")]
     public float holdJumpGravity = 1f; // less gravity while holding jump (for higher jump)
     public float baseGravity = 6f; // stronger gravity when falling
+    public float terminalVelocity = -20f;
     private const float ZERO_GRAVITY = 0f;
+
 
 
     [Space]
@@ -137,6 +139,12 @@ public class Player : MonoBehaviour
         }
 
         CheckGrounded();
+
+        // Add terminal velocity
+        if (rb.linearVelocity.y < terminalVelocity)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
+        }
     }
 
     private void WallSlide()
