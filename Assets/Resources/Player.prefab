@@ -168,7 +168,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5263151092089415325}
   serializedVersion: 8
-  lengthInSec: 0.2
+  lengthInSec: 0.1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -243,8 +243,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
-      minScalar: 0.3
+      scalar: 0.4
+      minScalar: 0.15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1050,7 +1050,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 3
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -5064,11 +5064,11 @@ MonoBehaviour:
   coyoteTime: 0.11
   jumpBufferTime: 0.15
   maxJumpTime: 0.2
-  dashSpeed: 65
+  dashSpeed: 90
   dashAirDrag: 14
   holdJumpGravity: 1
   baseGravity: 5
-  terminalVelocity: -20
+  terminalVelocity: -15
   canMove: 1
   isGrabbing: 0
   isSliding: 0
