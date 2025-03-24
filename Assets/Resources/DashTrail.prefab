@@ -225,6 +225,7 @@ MonoBehaviour:
   fadeColor: {r: 0, g: 1, b: 0.58431375, a: 0}
   afterEffectInterval: 0.05
   fadeTime: 1
+  dashParticle: {fileID: 2311238074972839921, guid: 4d3bb94042aa740a69d1ed4169c1a42f, type: 3}
 --- !u!1 &8880525349472635496
 GameObject:
   m_ObjectHideFlags: 0

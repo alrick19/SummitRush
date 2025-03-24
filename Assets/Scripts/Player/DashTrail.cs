@@ -12,6 +12,7 @@ public class DashTrail : MonoBehaviour
     public Color fadeColor;
     public float afterEffectInterval;
     public float fadeTime;
+    public ParticleSystem dashParticle;
 
     void Awake()
     {
@@ -54,6 +55,14 @@ public class DashTrail : MonoBehaviour
 {
     afterImage.position = player.transform.position;
     sr.flipX = anim.sprite.flipX;
+
+    if (dashParticle != null)
+    {
+        ParticleSystem particle = Instantiate(dashParticle, afterImage.position, Quaternion.identity);
+        particle.Play();
+
+        // Destroy(particle.gameObject, particle.main.duration + particle.main.startLifetime.constantMax);
+    }
 });
             seq.Append(sr.material.DOColor(trailColor, 0));
             seq.AppendCallback(() => FadeSprite(sr));
