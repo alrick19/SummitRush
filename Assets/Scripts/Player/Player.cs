@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Collision collision;
+    private AnimationScript animation;
 
     [Header("Movement Stats")]
     public float moveSpeed = 10f; // max speed
@@ -35,7 +36,7 @@ public class Player : MonoBehaviour
 
     [Space]
     [Header("Status booleans")]
-    private bool canMove = true;
+    public bool canMove = true;
     public bool isGrabbing;
     public bool isSliding;
     private bool wallJumped;
@@ -58,6 +59,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         collision = GetComponent<Collision>();
+        animation = GetComponentInChildren<AnimationScript>();
 
         rb.gravityScale = baseGravity; // default gravity
     }
@@ -131,7 +133,6 @@ public class Player : MonoBehaviour
 
         if (InputManager.GetDash() && !hasDashed)
         {
-            Debug.Log("Testing");
             Dash(horizontalMove, verticalMove);
         }
 
@@ -193,6 +194,8 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump() //execute jump
     {
+        animation.SetTrigger("Jumping");
+
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
         jumpStartTime = Time.time; // Record jump start time
@@ -203,6 +206,8 @@ public class Player : MonoBehaviour
         // reset grabbing and sliding
         isGrabbing = false;
         isSliding = false;
+
+        animation.SetTrigger("Jumping");
 
         StopCoroutine(DisableMovement(0));
         StartCoroutine(DisableMovement(0.2f));
@@ -295,6 +300,7 @@ public class Player : MonoBehaviour
     private void Dash(float xDir, float yDir)
     {
         hasDashed = true;
+        animation.SetTrigger("Dash");
 
         rb.linearVelocity = Vector2.zero;
         Vector2 dir = new Vector2(xDir, yDir);

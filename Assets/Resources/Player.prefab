@@ -113,7 +113,7 @@ Animator:
   m_GameObject: {fileID: 2621246940154990091}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58f67fba94b17422295c99ae9e07cefd, type: 2}
+  m_Controller: {fileID: 9100000, guid: fb51b14c819b04d3eae359cf88a328d0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -5036,7 +5036,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  collisionRadius: 0.2
+  collisionRadius: 0.4
   wallCollisionRadius: 0.05
   isGrounded: 0
   isWalled: 0

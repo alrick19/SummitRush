@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class AnimationScript : MonoBehaviour
@@ -8,6 +9,7 @@ public class AnimationScript : MonoBehaviour
     private Player playerMove;
     private Collision coll;
     private SpriteRenderer sprite;
+    private float verticalVelocity;
 
     void Awake()
     {
@@ -19,13 +21,16 @@ public class AnimationScript : MonoBehaviour
 
     void Update()
     {
-        anim.SetBool("isGrounded", coll.isGrounded);
-        anim.SetBool("isWalled", coll.isWalled);
-        anim.SetBool("rightWalled", coll.rightWalled);
+        verticalVelocity = playerMove.GetComponent<Rigidbody2D>().linearVelocity.y;
+        anim.SetFloat("verticalVelocity", verticalVelocity);
+        anim.SetFloat("horizontal", Mathf.Abs(playerMove.horizontalMove));
+        anim.SetFloat("vertical", Mathf.Abs(playerMove.verticalMove));
         anim.SetBool("isGrabbing", playerMove.isGrabbing);
         anim.SetBool("isDashing", playerMove.isDashing);
+
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        anim.SetBool("isGrounded", coll.isGrounded);
         anim.SetBool("isSliding", playerMove.isSliding);
-        anim.SetFloat("horizontalMove", Mathf.Abs(playerMove.horizontalMove));
         HandleSpriteFlip();
         runParticle();
     }
@@ -61,6 +66,11 @@ public class AnimationScript : MonoBehaviour
             if (runDust.isEmitting)
                 runDust.Stop();
         }
+    }
+
+    public void SetTrigger(string trigger)
+    {
+        anim.SetTrigger(trigger);
     }
 
     private void flipRunParticle(bool lookingRight)
