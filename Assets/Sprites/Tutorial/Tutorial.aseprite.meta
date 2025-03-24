@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638783554973653910
+  platformSettingsDirtyTick: 638784319835018320
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -134,7 +134,7 @@ ScriptedImporter:
       y: 4
       width: 73
       height: 63
-    spriteID: a5c366c5e707c4ed49d8a923aae9a7d2
+    spriteID: 48c3c11a08f6843ea9d3c7edead5ab5f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -156,7 +156,7 @@ ScriptedImporter:
       y: 59
       width: 80
       height: 8
-    spriteID: eee502a74d62b44fdb894bf959aef4e9
+    spriteID: f62c38311aaa04ea0957d6788c7c8e49
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -177,7 +177,7 @@ ScriptedImporter:
       y: 51
       width: 80
       height: 8
-    spriteID: 376569ee67b8e4453a5de65fb857dd43
+    spriteID: d6c9592e95c4044b780a23a46a6ff5ac
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -198,7 +198,7 @@ ScriptedImporter:
       y: 43
       width: 80
       height: 8
-    spriteID: 4f44593256e464c87afaf1ea3c42290d
+    spriteID: dfb28686a599043c4ae5a10efdccfd37
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -219,7 +219,7 @@ ScriptedImporter:
       y: 35
       width: 80
       height: 8
-    spriteID: 2051a74d08a5e4349ac0c6bcd0ba4fd7
+    spriteID: 619bad307df444656b630db341a996b9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -240,7 +240,7 @@ ScriptedImporter:
       y: 27
       width: 80
       height: 8
-    spriteID: bcd3e19c2bf9c43b4bfbb28bd0aeb832
+    spriteID: 379a4d6960a6a4a6f876057323f1423d
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -261,7 +261,7 @@ ScriptedImporter:
       y: 19
       width: 80
       height: 8
-    spriteID: b41a87991d58b4b228d297a20978d4b9
+    spriteID: 2b9c05cf5f501417b836bc8d8900cd8f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -282,7 +282,7 @@ ScriptedImporter:
       y: 11
       width: 80
       height: 8
-    spriteID: f909345084d074792a66d3b818443750
+    spriteID: b79a3f145b9ec4786aaa769a45cce9ba
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -303,7 +303,7 @@ ScriptedImporter:
       y: 3
       width: 80
       height: 8
-    spriteID: 940cf66830ece450497aaecf37ea0aa9
+    spriteID: c784e5641aa8d4783b77d1d13e9bd7ed
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -328,7 +328,7 @@ ScriptedImporter:
         y: 1
         width: 73
         height: 63
-      spriteId: a5c366c5e707c4ed49d8a923aae9a7d2
+      spriteId: 48c3c11a08f6843ea9d3c7edead5ab5f
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -380,7 +380,7 @@ ScriptedImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
-  generatePhysicsShape: 0
+  generatePhysicsShape: 1
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 80, y: 64}
