@@ -150,7 +150,7 @@ public class Player : MonoBehaviour
         CheckGrounded();
 
         // Add terminal velocity
-        if (rb.linearVelocity.y < terminalVelocity)
+        if (rb.linearVelocity.y < terminalVelocity && !isDashing)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
         }
