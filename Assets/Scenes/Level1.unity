@@ -1174,7 +1174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8613490329066215475, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
       propertyPath: terminalVelocity
-      value: -15
+      value: -12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

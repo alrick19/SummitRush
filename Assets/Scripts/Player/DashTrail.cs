@@ -41,7 +41,6 @@ public class DashTrail : MonoBehaviour
                 continue;
             }
 
-            afterImage.gameObject.SetActive(true);
 
 
             SpriteRenderer sr = afterImage.GetComponent<SpriteRenderer>();
@@ -53,6 +52,8 @@ public class DashTrail : MonoBehaviour
 
             seq.AppendCallback(() =>
 {
+    afterImage.gameObject.SetActive(true);
+
     afterImage.position = player.transform.position;
     sr.flipX = anim.sprite.flipX;
 

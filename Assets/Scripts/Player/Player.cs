@@ -1,4 +1,5 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -57,6 +58,10 @@ public class Player : MonoBehaviour
     public float climbSpeed = 6f;
     public float wallForce = 8f;
 
+    [Space]
+    [Header("Special Effects")]
+    public ParticleSystem jumpParticle;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -100,6 +105,10 @@ public class Player : MonoBehaviour
         if (isGrabbing && !isDashing)
         {
             WallGrab();
+            if (isGrabbing && collision.onLedge && verticalMove > 0)
+            {
+                StartCoroutine(ClimbLedge(collision.ledgePos));
+            }
         }
         else
         {
@@ -203,6 +212,8 @@ public class Player : MonoBehaviour
     private void Jump() //execute jump
     {
         anim.SetTrigger("Jumping");
+        if (!jumpParticle.isPlaying)
+            jumpParticle.Play();
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
@@ -284,6 +295,31 @@ public class Player : MonoBehaviour
         wallJumped = true;
         yield return new WaitForSeconds(time);
         wallJumped = false;
+    }
+
+    IEnumerator ClimbLedge(Vector2 ledgePosition)
+    {
+        canMove = false;
+
+        Vector2 startPos = transform.position;
+
+        // Slight offset to pull player up and in
+        Vector2 climbOffset = new Vector2(collision.leftWalled ? -0.25f : 0.25f, 0.5f);
+        Vector2 targetPos = ledgePosition + climbOffset;
+
+        float duration = 0.2f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector2.Lerp(startPos, targetPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPos;
+
+        canMove = true;
     }
 
     IEnumerator DashTime(float time)

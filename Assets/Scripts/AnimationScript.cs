@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using UnityEngine;
 
 public class AnimationScript : MonoBehaviour
@@ -29,7 +30,6 @@ public class AnimationScript : MonoBehaviour
         anim.SetBool("isDashing", playerMove.isDashing);
         anim.SetBool("canMove", playerMove.canMove);
 
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
         anim.SetBool("isGrounded", coll.isGrounded);
         anim.SetBool("isSliding", playerMove.isSliding);
         HandleSpriteFlip();
@@ -38,6 +38,10 @@ public class AnimationScript : MonoBehaviour
 
     public void HandleSpriteFlip()
     {
+        // prevent flipping mid-climb/grab
+        if (playerMove.isGrabbing && coll.rightWalled || coll.leftWalled)
+            return;
+
         if (playerMove.horizontalMove > 0.01)
         {
             sprite.flipX = true;
