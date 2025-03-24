@@ -300,12 +300,13 @@ public class Player : MonoBehaviour
 
     private void Dash(float xDir, float yDir)
     {
+        CameraShake.Shake(0.2f, 5f);
         hasDashed = true;
         anim.SetTrigger("Dash");
 
         rb.linearVelocity = Vector2.zero;
 
-        if (xDir == 0)
+        if (xDir == 0 && yDir == 0)
         {
             xDir = anim.sprite.flipX ? 1 : -1;
         }
