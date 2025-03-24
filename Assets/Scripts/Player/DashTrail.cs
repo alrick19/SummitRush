@@ -15,8 +15,6 @@ public class DashTrail : MonoBehaviour
 
     void Awake()
     {
-        player = FindFirstObjectByType<Player>();
-        anim = FindFirstObjectByType<AnimationScript>();
         dashTrailParent = transform;
     }
 
@@ -28,6 +26,10 @@ public class DashTrail : MonoBehaviour
 
     public void ShowTrail()
     {
+        player = FindFirstObjectByType<Player>();
+        anim = FindFirstObjectByType<AnimationScript>();
+
+
         Sequence seq = DOTween.Sequence();
 
         for (int i = 0; i < dashTrailParent.childCount; i++)
@@ -52,7 +54,6 @@ public class DashTrail : MonoBehaviour
 {
     afterImage.position = player.transform.position;
     sr.flipX = anim.sprite.flipX;
-    // sr.sprite = anim.sprite.sprite;
 });
             seq.Append(sr.material.DOColor(trailColor, 0));
             seq.AppendCallback(() => FadeSprite(sr));

@@ -304,6 +304,12 @@ public class Player : MonoBehaviour
         anim.SetTrigger("Dash");
 
         rb.linearVelocity = Vector2.zero;
+
+        if (xDir == 0)
+        {
+            xDir = anim.sprite.flipX ? 1 : -1;
+        }
+
         Vector2 dir = new Vector2(xDir, yDir);
         Debug.Log(dir);
         // set Dashing Velocity
