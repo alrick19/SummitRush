@@ -36,17 +36,17 @@ public class Player : MonoBehaviour
     [Space]
     [Header("Status booleans")]
     private bool canMove = true;
-    private bool isGrabbing;
-    private bool isSliding;
+    public bool isGrabbing;
+    public bool isSliding;
     private bool wallJumped;
-    private bool isJumping;
-    private bool isDashing;
+    public bool isJumping;
+    public bool isDashing;
     private bool hasDashed;
 
     [Space]
     [Header("Movement Input")]
-    private float horizontalMove;
-    private float verticalMove;
+    public float horizontalMove;
+    public float verticalMove;
 
 
     [Header("Wall properties")]
