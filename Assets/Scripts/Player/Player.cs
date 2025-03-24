@@ -1,4 +1,5 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -6,6 +7,7 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Collision collision;
+    private AnimationScript anim;
 
     [Header("Movement Stats")]
     public float moveSpeed = 10f; // max speed
@@ -30,12 +32,14 @@ public class Player : MonoBehaviour
     [Header("Gravity Attributes")]
     public float holdJumpGravity = 1f; // less gravity while holding jump (for higher jump)
     public float baseGravity = 6f; // stronger gravity when falling
+    public float terminalVelocity = -20f;
     private const float ZERO_GRAVITY = 0f;
+
 
 
     [Space]
     [Header("Status booleans")]
-    private bool canMove = true;
+    public bool canMove = true;
     public bool isGrabbing;
     public bool isSliding;
     private bool wallJumped;
@@ -54,10 +58,15 @@ public class Player : MonoBehaviour
     public float climbSpeed = 6f;
     public float wallForce = 8f;
 
+    [Space]
+    [Header("Special Effects")]
+    public ParticleSystem jumpParticle;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         collision = GetComponent<Collision>();
+        anim = GetComponentInChildren<AnimationScript>();
 
         rb.gravityScale = baseGravity; // default gravity
     }
@@ -96,6 +105,10 @@ public class Player : MonoBehaviour
         if (isGrabbing && !isDashing)
         {
             WallGrab();
+            if (isGrabbing && collision.onLedge && verticalMove > 0)
+            {
+                StartCoroutine(ClimbLedge(collision.ledgePos));
+            }
         }
         else
         {
@@ -131,11 +144,16 @@ public class Player : MonoBehaviour
 
         if (InputManager.GetDash() && !hasDashed)
         {
-            Debug.Log("Testing");
             Dash(horizontalMove, verticalMove);
         }
 
         CheckGrounded();
+
+        // Add terminal velocity
+        if (rb.linearVelocity.y < terminalVelocity)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
+        }
     }
 
     private void WallSlide()
@@ -193,6 +211,9 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump() //execute jump
     {
+        anim.SetTrigger("Jumping");
+        jumpParticle.Play();
+
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
         jumpStartTime = Time.time; // Record jump start time
@@ -203,6 +224,8 @@ public class Player : MonoBehaviour
         // reset grabbing and sliding
         isGrabbing = false;
         isSliding = false;
+
+        anim.SetTrigger("Jumping");
 
         StopCoroutine(DisableMovement(0));
         StartCoroutine(DisableMovement(0.2f));
@@ -273,8 +296,34 @@ public class Player : MonoBehaviour
         wallJumped = false;
     }
 
+    IEnumerator ClimbLedge(Vector2 ledgePosition)
+    {
+        canMove = false;
+
+        Vector2 startPos = transform.position;
+
+        // Slight offset to pull player up and in
+        Vector2 climbOffset = new Vector2(collision.leftWalled ? -0.25f : 0.25f, 0.5f);
+        Vector2 targetPos = ledgePosition + climbOffset;
+
+        float duration = 0.2f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector2.Lerp(startPos, targetPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPos;
+
+        canMove = true;
+    }
+
     IEnumerator DashTime(float time)
     {
+        FindFirstObjectByType<DashTrail>().ShowTrail();
         wallJumped = true;
         isDashing = true;
 
@@ -294,9 +343,17 @@ public class Player : MonoBehaviour
 
     private void Dash(float xDir, float yDir)
     {
+        CameraShake.Shake(0.2f, 5f);
         hasDashed = true;
+        anim.SetTrigger("Dash");
 
         rb.linearVelocity = Vector2.zero;
+
+        if (xDir == 0 && yDir == 0)
+        {
+            xDir = anim.sprite.flipX ? 1 : -1;
+        }
+
         Vector2 dir = new Vector2(xDir, yDir);
         Debug.Log(dir);
         // set Dashing Velocity

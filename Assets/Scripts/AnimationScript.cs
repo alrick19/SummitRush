@@ -1,3 +1,5 @@
+using System;
+using System.Net;
 using UnityEngine;
 
 public class AnimationScript : MonoBehaviour
@@ -7,7 +9,8 @@ public class AnimationScript : MonoBehaviour
     private Animator anim;
     private Player playerMove;
     private Collision coll;
-    private SpriteRenderer sprite;
+    public SpriteRenderer sprite;
+    private float verticalVelocity;
 
     void Awake()
     {
@@ -19,19 +22,26 @@ public class AnimationScript : MonoBehaviour
 
     void Update()
     {
-        anim.SetBool("isGrounded", coll.isGrounded);
-        anim.SetBool("isWalled", coll.isWalled);
-        anim.SetBool("rightWalled", coll.rightWalled);
+        verticalVelocity = playerMove.GetComponent<Rigidbody2D>().linearVelocity.y;
+        anim.SetFloat("verticalVelocity", verticalVelocity);
+        anim.SetFloat("horizontal", Mathf.Abs(playerMove.horizontalMove));
+        anim.SetFloat("vertical", Mathf.Abs(playerMove.verticalMove));
         anim.SetBool("isGrabbing", playerMove.isGrabbing);
         anim.SetBool("isDashing", playerMove.isDashing);
+        anim.SetBool("canMove", playerMove.canMove);
+
+        anim.SetBool("isGrounded", coll.isGrounded);
         anim.SetBool("isSliding", playerMove.isSliding);
-        anim.SetFloat("horizontalMove", Mathf.Abs(playerMove.horizontalMove));
         HandleSpriteFlip();
         runParticle();
     }
 
     public void HandleSpriteFlip()
     {
+        // prevent flipping mid-climb/grab
+        if (playerMove.isGrabbing && coll.rightWalled || coll.leftWalled)
+            return;
+
         if (playerMove.horizontalMove > 0.01)
         {
             sprite.flipX = true;
@@ -61,6 +71,11 @@ public class AnimationScript : MonoBehaviour
             if (runDust.isEmitting)
                 runDust.Stop();
         }
+    }
+
+    public void SetTrigger(string trigger)
+    {
+        anim.SetTrigger(trigger);
     }
 
     private void flipRunParticle(bool lookingRight)

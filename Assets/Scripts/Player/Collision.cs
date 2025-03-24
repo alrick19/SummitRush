@@ -12,6 +12,8 @@ public class Collision : MonoBehaviour
     public bool isWalled;
     public bool rightWalled;
     public bool leftWalled;
+    public bool onLedge;
+    public Vector2 ledgePos;
 
     private Vector2 bottomOffset;
     private Vector2 leftOffset;
@@ -36,13 +38,14 @@ public class Collision : MonoBehaviour
         // ground check
         isGrounded = Physics2D.OverlapCircle((Vector2)transform.position + bottomOffset, collisionRadius, groundLayer);
 
-        // wall check
-        isWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, wallCollisionRadius, groundLayer) || Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, wallCollisionRadius, groundLayer);
-
         // positional wall
         rightWalled = Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, wallCollisionRadius, groundLayer);
         leftWalled = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, wallCollisionRadius, groundLayer);
 
+        // wall check
+        isWalled = rightWalled || leftWalled;
+
+        CheckForLedge(rightWalled, leftWalled);
     }
 
     /// <summary>
@@ -54,5 +57,30 @@ public class Collision : MonoBehaviour
         Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
         Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, wallCollisionRadius);
         Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, wallCollisionRadius);
+    }
+
+    private void CheckForLedge(bool rightWall, bool leftWall)
+    {
+        Vector2 ledgeCheckOffset = new Vector2(0, 0.6f); // height above grab point
+        Vector2 rightCheck = (Vector2)transform.position + rightOffset + ledgeCheckOffset;
+        Vector2 leftCheck = (Vector2)transform.position + leftOffset + ledgeCheckOffset;
+
+        bool noTileAboveRight = !Physics2D.OverlapCircle(rightCheck, wallCollisionRadius, groundLayer);
+        bool noTileAboveLeft = !Physics2D.OverlapCircle(leftCheck, wallCollisionRadius, groundLayer);
+
+        if (rightWall && noTileAboveRight)
+        {
+            onLedge = true;
+            ledgePos = rightCheck;
+        }
+        else if (leftWall && noTileAboveLeft)
+        {
+            onLedge = true;
+            ledgePos = leftCheck;
+        }
+        else
+        {
+            onLedge = false;
+        }
     }
 }
