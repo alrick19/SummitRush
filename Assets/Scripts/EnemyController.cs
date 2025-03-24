@@ -31,14 +31,21 @@ public class EnemyController : MonoBehaviour
         }
         if(Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointB.transform)
         {
+            Flip();
             currentPoint = pointA.transform;    
         }
         if(Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointA.transform)
         {
+            Flip();
             currentPoint = pointB.transform;    
         }
     }
-
+    private void Flip()
+    {
+        Vector3 localScale = transform.localScale;
+        localScale.x *= -1;
+        transform.localScale = localScale;
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(pointA.transform.position, 0.2f);
