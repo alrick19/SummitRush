@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 public class GameManager : SingletonMonoBehavior<GameManager>
 {
@@ -8,16 +7,40 @@ public class GameManager : SingletonMonoBehavior<GameManager>
     private int collectedCount;
 
     public int currentLevelIndex;
-    public int unlockedLevelIndex; // highest unlocked level
+    public int unlockedLevelIndex;
 
     private bool isPaused = false;
 
-    private void Awake()
+    protected override void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        base.Awake(); // Ensures singleton logic from base class
 
+        // Only run on initial load
         unlockedLevelIndex = PlayerPrefs.GetInt("UnlockedLevelIndex", 0);
-        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name.StartsWith("Level"))
+        {
+            InitializeLevel();
+        }
+    }
+
+    public void InitializeLevel()
+    {
+        ResetLevelProgress();
+        totalCollectiblesInLevel = GameObject.FindGameObjectsWithTag("Collectible").Length;
     }
 
     public void RegisterCollectible()
@@ -36,6 +59,8 @@ public class GameManager : SingletonMonoBehavior<GameManager>
 
     public void CompleteLevel()
     {
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+
         if (currentLevelIndex >= unlockedLevelIndex)
         {
             unlockedLevelIndex = currentLevelIndex + 1;
@@ -50,24 +75,20 @@ public class GameManager : SingletonMonoBehavior<GameManager>
     {
         Time.timeScale = 0f;
         isPaused = true;
-        // Show Pause Menu UI
     }
 
     public void ResumeGame()
     {
         Time.timeScale = 1f;
         isPaused = false;
-        // Hide Pause Menu UI
     }
 
-    public bool IsPaused()
-    {
-        return isPaused;
-    }
+    public bool IsPaused() => isPaused;
 
     public void ResetLevelProgress()
     {
         collectedCount = 0;
+        totalCollectiblesInLevel = 0;
     }
 
     public void StartNewGame()
