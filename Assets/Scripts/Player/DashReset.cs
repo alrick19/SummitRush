@@ -4,13 +4,13 @@ using System.Collections;
 
 public class DashReset : MonoBehaviour
 {
-    public float respawnTime = 4f;
+    public float respawnTime = 2f;
     private SpriteRenderer sr;
     private Collider2D col;
 
     void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         col = GetComponent<Collider2D>();
     }
 

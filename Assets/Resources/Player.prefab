@@ -5064,7 +5064,7 @@ MonoBehaviour:
   coyoteTime: 0.11
   jumpBufferTime: 0.15
   maxJumpTime: 0.2
-  dashSpeed: 90
+  dashSpeed: 95
   dashAirDrag: 14
   holdJumpGravity: 1
   baseGravity: 5
@@ -5078,7 +5078,7 @@ MonoBehaviour:
   verticalMove: 0
   slideSpeed: 5
   climbSpeed: 6
-  wallForce: 8
+  wallForce: 10
   jumpParticle: {fileID: 5557731787235605367}
 --- !u!70 &3346169528522036503
 CapsuleCollider2D:
