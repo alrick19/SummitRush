@@ -1,22 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ButtonHooks : MonoBehaviour
+public class MainMenuHandler : MonoBehaviour
 {
-    public Button level1Button;
+    public Button playButton;
     public Button mainMenuButton;
     public Button quitButton;
 
     private void Start()
     {
-        if (level1Button) level1Button.onClick.AddListener(LoadLevel1);
+        if (playButton) playButton.onClick.AddListener(PlayGame);
         if (mainMenuButton) mainMenuButton.onClick.AddListener(LoadMainMenu);
         if (quitButton) quitButton.onClick.AddListener(QuitGame);
     }
 
-    private void LoadLevel1()
+    public void PlayGame()
     {
-        SceneHandler.Instance.LoadScene("Level1");
+        if (PlayerPrefs.HasKey("UnlockedLevelIndex"))
+            GameManager.Instance.ContinueGame();
+        else
+            GameManager.Instance.StartNewGame();
     }
 
     private void LoadMainMenu()
@@ -31,7 +34,7 @@ public class ButtonHooks : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (level1Button) level1Button.onClick.RemoveListener(LoadLevel1);
+        if (playButton) playButton.onClick.RemoveListener(PlayGame);
         if (mainMenuButton) mainMenuButton.onClick.RemoveListener(LoadMainMenu);
         if (quitButton) quitButton.onClick.RemoveListener(QuitGame);
     }

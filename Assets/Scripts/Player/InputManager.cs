@@ -2,38 +2,45 @@ using UnityEngine;
 
 public static class InputManager
 {
+    private static bool inputLocked = false;
+
+    public static void LockInput() => inputLocked = true;
+    public static void UnlockInput() => inputLocked = false;
+
     public static float GetHorizontal()
     {
-        return Input.GetAxisRaw("Horizontal"); // -1 (left), 1 (right), or 0 (idle)
+        if (inputLocked) return 0f;
+        return Input.GetAxisRaw("Horizontal");
     }
 
     public static float GetVertical()
     {
-        return Input.GetAxisRaw("Vertical"); // - 1 (down), 1 (up), or 0 (idle)
+        if (inputLocked) return 0f;
+        return Input.GetAxisRaw("Vertical");
     }
 
     public static bool GetJumpInput()
     {
-        return Input.GetKeyDown(KeyCode.Space); // Detects jump press
+        return !inputLocked && Input.GetKeyDown(KeyCode.Space);
     }
 
     public static bool GetJumpHeld()
     {
-        return Input.GetKey(KeyCode.Space); // Detects jump being held
+        return !inputLocked && Input.GetKey(KeyCode.Space);
     }
 
     public static bool GetJumpReleased()
     {
-        return Input.GetKeyUp(KeyCode.Space); // Detects jump release
+        return !inputLocked && Input.GetKeyUp(KeyCode.Space);
     }
 
     public static bool GetWallGrab()
     {
-        return Input.GetKey(KeyCode.LeftShift); // Detects Wall Grab Hold
+        return !inputLocked && Input.GetKey(KeyCode.LeftShift);
     }
 
     public static bool GetDash()
     {
-        return Input.GetKey(KeyCode.Mouse0);
+        return !inputLocked && Input.GetKey(KeyCode.Mouse0);
     }
 }
