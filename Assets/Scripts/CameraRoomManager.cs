@@ -1,9 +1,9 @@
 using UnityEngine;
-using Unity.Cinemachine; 
+using Unity.Cinemachine;
 
 public class CameraRoomManager : MonoBehaviour
 {
-    public CinemachineCamera virtualCam; 
+    public CinemachineCamera virtualCam;
 
     private void Start()
     {
@@ -14,7 +14,7 @@ public class CameraRoomManager : MonoBehaviour
             virtualCam.Follow = player.transform;
             virtualCam.LookAt = player.transform;
         }
-            
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
