@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonMonoBehavior<GameManager>
 {
-    public int totalCollectiblesInLevel;
-    private int collectedCount;
+    private int totalRoomsInLevel;
+    private int completedRooms;
 
     public int currentLevelIndex;
     public int unlockedLevelIndex;
@@ -40,21 +40,20 @@ public class GameManager : SingletonMonoBehavior<GameManager>
     public void InitializeLevel()
     {
         ResetLevelProgress();
-        totalCollectiblesInLevel = GameObject.FindGameObjectsWithTag("Collectible").Length;
+
+        RoomManager[] rooms = FindObjectsByType<RoomManager>(FindObjectsSortMode.None);
+        totalRoomsInLevel = rooms.Length;
+        completedRooms = 0;
     }
 
-    public void RegisterCollectible()
+    public void RegisterRoomCompletion()
     {
-        collectedCount++;
-        if (collectedCount >= totalCollectiblesInLevel)
-        {
-            Debug.Log("All collectibles gathered! Ready to finish level.");
-        }
+        completedRooms++;
     }
 
     public bool CanFinishLevel()
     {
-        return collectedCount >= totalCollectiblesInLevel;
+        return completedRooms >= totalRoomsInLevel;
     }
 
     public void CompleteLevel()
@@ -87,8 +86,8 @@ public class GameManager : SingletonMonoBehavior<GameManager>
 
     public void ResetLevelProgress()
     {
-        collectedCount = 0;
-        totalCollectiblesInLevel = 0;
+        totalRoomsInLevel = 0;
+        completedRooms = 0;
     }
 
     public void StartNewGame()
