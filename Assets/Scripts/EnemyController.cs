@@ -21,30 +21,47 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 point = currentPoint.position - transform.position;
-        if(currentPoint == pointB.transform)
-        {
-            rb.linearVelocity = new Vector2(speed, 0);
-        }else
-        {
-            rb.linearVelocity = new Vector2(-speed, 0);
-        }
-        if(Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointB.transform)
+        // Vector2 point = currentPoint.position - transform.position;
+        // if(currentPoint == pointB.transform)
+        // {
+        //     rb.linearVelocity = new Vector2(speed, 0);
+        // }else
+        // {
+        //     rb.linearVelocity = new Vector2(-speed, 0);
+        // }
+        // if(Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointB.transform)
+        // {
+        //     Flip();
+        //     currentPoint = pointA.transform;    
+        // }
+        // if(Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointA.transform)
+        // {
+        //     Flip();
+        //     currentPoint = pointB.transform;    
+        // }
+        Vector2 direction = (currentPoint.position - transform.position).normalized;
+        rb.linearVelocity = direction * speed;
+
+        if (Vector2.Distance(transform.position, currentPoint.position) < 0.5f)
         {
             Flip();
-            currentPoint = pointA.transform;    
+            currentPoint = currentPoint == pointB.transform ? pointA.transform : pointB.transform;
         }
-        if(Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointA.transform)
-        {
-            Flip();
-            currentPoint = pointB.transform;    
-        }
+
     }
     private void Flip()
     {
-        Vector3 localScale = transform.localScale;
-        localScale.x *= -1;
-        transform.localScale = localScale;
+        // Vector3 localScale = transform.localScale;
+        // localScale.x *= -1;
+        // transform.localScale = localScale;
+        if (currentPoint.position.x < transform.position.x)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
     }
     private void OnDrawGizmos()
     {
