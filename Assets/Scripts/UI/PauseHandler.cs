@@ -23,7 +23,6 @@ public class PauseHandler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Escape pressed");
             if (GameManager.Instance.IsPaused())
             {
                 Resume();

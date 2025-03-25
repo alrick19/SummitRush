@@ -13,10 +13,10 @@ public class GameManager : SingletonMonoBehavior<GameManager>
 
     protected override void Awake()
     {
-        base.Awake(); // Ensures singleton logic from base class
-
-        // Only run on initial load
-        unlockedLevelIndex = PlayerPrefs.GetInt("UnlockedLevelIndex", 0);
+        base.Awake(); 
+        //PlayerPrefs.DeleteAll(); //REMOVE IN BUILD. DEV ONLY TO RESET
+        //PlayerPrefs.Save(); 
+        unlockedLevelIndex = PlayerPrefs.GetInt("UnlockedLevelIndex", 2);//level 1 defualt.
     }
 
     private void OnEnable()
