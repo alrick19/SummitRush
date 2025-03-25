@@ -55,7 +55,7 @@ public class KillPlayer : MonoBehaviour
 
         isRespawning = false;
     }
-    
+
 
     private GameObject SpawnNewPlayer()
     {
@@ -90,10 +90,10 @@ public class KillPlayer : MonoBehaviour
     {
         CinemachineCamera[] allCams = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None);
 
-            foreach (var cam in allCams)
-            {
-                cam.Follow = newTarget;
-                cam.LookAt = newTarget; 
-            }
+        foreach (var cam in allCams)
+        {
+            cam.Follow = newTarget;
+            cam.LookAt = newTarget;
+        }
     }
 }
