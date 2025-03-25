@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ButtonHooks : MonoBehaviour
+public class MainMenuHandler : MonoBehaviour
 {
     public Button playButton;
     public Button mainMenuButton;
