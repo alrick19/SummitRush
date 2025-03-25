@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PauseHandler : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class PauseHandler : MonoBehaviour
     public Button resumeButton;
     public Button mainMenuButton;
     public Button quitButton;
+
 
     private void Start()
     {
@@ -21,6 +23,7 @@ public class PauseHandler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Debug.Log("Escape pressed");
             if (GameManager.Instance.IsPaused())
             {
                 Resume();
@@ -36,12 +39,25 @@ public class PauseHandler : MonoBehaviour
     {
         GameManager.Instance.PauseGame();
         pauseMenuUI.SetActive(true);
+        InputManager.LockInput();
     }
 
     public void Resume()
     {
-        GameManager.Instance.ResumeGame();
+        StartCoroutine(DelayedResume());
+    }
+
+    private IEnumerator DelayedResume()
+    {
         pauseMenuUI.SetActive(false);
+
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        GameManager.Instance.ResumeGame();
+
+        yield return null; 
+
+        InputManager.UnlockInput();
     }
 
     public void GoToMainMenu()
