@@ -35,6 +35,8 @@ public class DashTrail : MonoBehaviour
 
         for (int i = 0; i < dashTrailParent.childCount; i++)
         {
+            if (player == null)
+                return;
             Transform afterImage = dashTrailParent.GetChild(i);
             if (afterImage == null)
             {
@@ -52,6 +54,8 @@ public class DashTrail : MonoBehaviour
 
             seq.AppendCallback(() =>
 {
+    if (player == null || anim == null || afterImage == null || sr == null)
+        return;
     afterImage.gameObject.SetActive(true);
 
     afterImage.position = player.transform.position;
@@ -61,8 +65,6 @@ public class DashTrail : MonoBehaviour
     {
         ParticleSystem particle = Instantiate(dashParticle, afterImage.position, Quaternion.identity);
         particle.Play();
-
-        // Destroy(particle.gameObject, particle.main.duration + particle.main.startLifetime.constantMax);
     }
 });
             seq.Append(sr.material.DOColor(trailColor, 0));
