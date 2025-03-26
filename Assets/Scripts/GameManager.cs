@@ -44,6 +44,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
         RoomManager[] rooms = FindObjectsByType<RoomManager>(FindObjectsSortMode.None);
         totalRoomsInLevel = rooms.Length;
         completedRooms = 0;
+        InputManager.UnlockInput();
     }
 
     public void RegisterRoomCompletion()
