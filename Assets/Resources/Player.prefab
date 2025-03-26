@@ -5068,7 +5068,7 @@ MonoBehaviour:
   dashAirDrag: 14
   holdJumpGravity: 1
   baseGravity: 5
-  terminalVelocity: -15
+  terminalVelocity: -13
   canMove: 1
   isGrabbing: 0
   isSliding: 0

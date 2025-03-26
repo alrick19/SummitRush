@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
 
 public class SceneHandler : SingletonMonoBehavior<SceneHandler>
 {
-    public Slider progressBar;//loading state
-
+    public TextMeshProUGUI loadingText;
     private string _nextSceneName = "MainMenu";//default to main menu
 
     private void Start()
@@ -43,56 +43,51 @@ public class SceneHandler : SingletonMonoBehavior<SceneHandler>
     {
         SceneManager.LoadScene("Preload"); // Load the Preload Scene
         yield return new WaitForSeconds(0.5f); 
+        if (loadingText == null)
+        {
+            var foundText = GameObject.FindWithTag("LoadingText");
+            if (foundText) loadingText = foundText.GetComponent<TextMeshProUGUI>();
+        }
+
         StartCoroutine(LoadSceneAsync());
     }
 
     private IEnumerator LoadSceneAsync()
     {
-        Debug.Log("Starting async loading of: " + _nextSceneName);
+        if (loadingText)
+            loadingText.text = $"Loading {GetFormattedSceneName(_nextSceneName)}...";
+
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_nextSceneName);
         asyncLoad.allowSceneActivation = false;
 
         float elapsedTime = 0f;
-        float minLoadTime = 1.5f; // Simulated minimum loading time
-        float displayProgress = 0f; // Stores smooth progress for UI
+        float minLoadTime = 1.5f;
 
-        // Try to find the progress bar in the Preload Scene
-        if (progressBar == null)
+        //wait a minimum time to show spinner for a moment
+        while (elapsedTime < minLoadTime || asyncLoad.progress < 0.9f)
         {
-            GameObject sliderObj = GameObject.FindWithTag("ProgressBar");
-            if (sliderObj) progressBar = sliderObj.GetComponent<Slider>();
-        }
-
-        while (!asyncLoad.isDone)
-        {
-            // Calculate the progress 
-            float targetProgress = Mathf.Clamp01(asyncLoad.progress / 0.8f);
-
-            // Smoothly interpolate the display progress bar
-            while (displayProgress < targetProgress)
-            {
-                displayProgress = Mathf.MoveTowards(displayProgress, targetProgress, Time.deltaTime);
-                if (progressBar) progressBar.value = displayProgress;
-                yield return null;
-            }
-
-            elapsedTime += Time.deltaTime;
-
-            if (asyncLoad.progress >= 0.8f && elapsedTime >= minLoadTime)
-            {
-                // Smoothly move to 1 before switching scenes
-                while (displayProgress < 1f)
-                {
-                    displayProgress = Mathf.MoveTowards(displayProgress, 1f, Time.deltaTime);
-                    if (progressBar) progressBar.value = displayProgress;
-                    yield return null;
-                }
-
-                asyncLoad.allowSceneActivation = true;
-            }
-
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
+
+        // Activate the scene after delay
+        asyncLoad.allowSceneActivation = true;
+    }
+
+    private string GetFormattedSceneName(string rawName)
+    {
+        if (rawName.StartsWith("Level"))
+        {
+            // Convert "Level#" to "Level #"
+            string numberPart = rawName.Substring("Level".Length);
+            return $"Level {numberPart}";
+        }
+        else if (rawName == "MainMenu")
+        {
+            return "Main Menu";
+        }
+
+        return rawName;
     }
 
    
