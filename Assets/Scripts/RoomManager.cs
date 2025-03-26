@@ -33,4 +33,17 @@ public class RoomManager : MonoBehaviour
     }
 
     public bool IsComplete() => roomComplete;
+
+    public void ResetCollectibles()
+    {
+        if (roomComplete) return;
+
+        collectedCount = 0;
+
+        var collectibles = GetComponentsInChildren<Collectible>(includeInactive: true);
+        foreach (var collectible in collectibles)
+        {
+            collectible.ResetCollectible();
+        }
+    }
 }

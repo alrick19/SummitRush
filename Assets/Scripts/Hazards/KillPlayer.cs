@@ -39,6 +39,7 @@ public class KillPlayer : MonoBehaviour
 
         Destroy(player); // Destroy the player
 
+        ResetRoom();
         yield return new WaitForSeconds(0.5f); // Wait before respawning
 
         // Find or instantiate the player at the respawn point
@@ -56,6 +57,12 @@ public class KillPlayer : MonoBehaviour
         isRespawning = false;
     }
 
+    private void ResetRoom()
+    {
+        CameraRoomManager cameraRoomManager = GetComponentInParent<CameraRoomManager>();
+        cameraRoomManager.ResetCollectibles();
+        cameraRoomManager.ResetHazards();
+    }
 
     private GameObject SpawnNewPlayer()
     {

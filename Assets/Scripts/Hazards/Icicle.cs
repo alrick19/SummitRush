@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Icicle : MonoBehaviour, IResettableHazard
@@ -16,6 +17,8 @@ public class Icicle : MonoBehaviour, IResettableHazard
         {
             room.Register(this); // Register this icicle in the room's hazard manager
         }
+
+
     }
 
     public void TriggerFall()
@@ -23,7 +26,7 @@ public class Icicle : MonoBehaviour, IResettableHazard
         if (hasFallen) return;
         hasFallen = true;
         rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.gravityScale = 3f;
+        rb.gravityScale = 4f;
     }
 
     public void ResetHazard()
@@ -31,6 +34,7 @@ public class Icicle : MonoBehaviour, IResettableHazard
         hasFallen = false;
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.linearVelocity = Vector2.zero;
+
         transform.position = startPos;
         gameObject.SetActive(true);
     }
