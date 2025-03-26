@@ -69,8 +69,12 @@ public class KillPlayer : MonoBehaviour
     private void ResetRoom()
     {
         CameraRoomManager cameraRoomManager = GetComponentInParent<CameraRoomManager>();
-        cameraRoomManager.ResetCollectibles();
-        cameraRoomManager.ResetHazards();
+        if (cameraRoomManager != null)
+        {
+            cameraRoomManager.ResetCollectibles();
+            cameraRoomManager.ResetHazards();
+        }
+        
     }
 
     private GameObject SpawnNewPlayer()
