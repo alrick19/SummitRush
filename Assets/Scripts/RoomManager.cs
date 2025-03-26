@@ -5,7 +5,7 @@ public class RoomManager : MonoBehaviour
 {
     public int totalCollectibles;
     private int collectedCount;
-    public GameObject doorToNextRoom; 
+    public GameObject doorToNextRoom;
 
     private bool roomComplete = false;
 
@@ -22,11 +22,28 @@ public class RoomManager : MonoBehaviour
         if (collectedCount >= totalCollectibles && !roomComplete)
         {
             roomComplete = true;
-            if (doorToNextRoom) doorToNextRoom.SetActive(false); // unlock next room
+            if (doorToNextRoom)
+            {
+                doorToNextRoom.SetActive(false); // unlock next room
+
+            }
 
             GameManager.Instance.RegisterRoomCompletion();
         }
     }
 
     public bool IsComplete() => roomComplete;
+
+    public void ResetCollectibles()
+    {
+        if (roomComplete) return;
+
+        collectedCount = 0;
+
+        var collectibles = GetComponentsInChildren<Collectible>(includeInactive: true);
+        foreach (var collectible in collectibles)
+        {
+            collectible.ResetCollectible();
+        }
+    }
 }

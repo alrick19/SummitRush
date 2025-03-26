@@ -1,5 +1,4 @@
 using System.Collections;
-using JetBrains.Annotations;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -142,7 +141,7 @@ public class Player : MonoBehaviour
         }
         BetterJump();
 
-        if (InputManager.GetDash() && !hasDashed)
+        if (InputManager.GetDash() && !hasDashed && !isDashing)
         {
             Dash(horizontalMove, verticalMove);
         }
@@ -150,7 +149,7 @@ public class Player : MonoBehaviour
         CheckGrounded();
 
         // Add terminal velocity
-        if (rb.linearVelocity.y < terminalVelocity)
+        if (rb.linearVelocity.y < terminalVelocity && !isDashing)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
         }
@@ -355,10 +354,14 @@ public class Player : MonoBehaviour
         }
 
         Vector2 dir = new Vector2(xDir, yDir);
-        Debug.Log(dir);
+
         // set Dashing Velocity
         rb.linearVelocity += dir.normalized * dashSpeed;
         StartCoroutine(DashTime(0.3f));
     }
 
+    public void ResetDash()
+    {
+        hasDashed = false;
+    }
 }

@@ -14,7 +14,12 @@ public class Collectible : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             roomManager?.RegisterCollectible();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
+    }
+
+    public void ResetCollectible()
+    {
+        gameObject.SetActive(true);
     }
 }

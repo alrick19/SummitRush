@@ -1,9 +1,11 @@
 using UnityEngine;
-using Unity.Cinemachine; 
+using Unity.Cinemachine;
 
 public class CameraRoomManager : MonoBehaviour
 {
-    public CinemachineCamera virtualCam; 
+    public CinemachineCamera virtualCam;
+    private RoomHazardManager hazardManager; // manages resettable hazards in this room
+
 
     private void Start()
     {
@@ -14,7 +16,23 @@ public class CameraRoomManager : MonoBehaviour
             virtualCam.Follow = player.transform;
             virtualCam.LookAt = player.transform;
         }
-            
+
+        // hazardManager component should be attached to the room
+        hazardManager = GetComponent<RoomHazardManager>();
+
+    }
+
+    public void ResetHazards()
+    {
+        if (hazardManager)
+            hazardManager.ResetAllHazards();
+    }
+
+    public void ResetCollectibles()
+    {
+        RoomManager rm = GetComponentInChildren<RoomManager>();
+        if (rm)
+            rm.ResetCollectibles();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -25,6 +43,8 @@ public class CameraRoomManager : MonoBehaviour
             virtualCam.Follow = other.transform;
             virtualCam.LookAt = other.transform;
         }
+
+        ResetHazards();
     }
 
     private void OnTriggerExit2D(Collider2D other)
