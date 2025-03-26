@@ -12,6 +12,8 @@ public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
     private string[] lines;
     private int currentLine;
     private bool isCutsceneActive = false;
+    private Coroutine typeCoroutine;
+    private bool isTyping = false;
 
     private void Update()
     {
@@ -25,7 +27,7 @@ public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
 
     public void StartCutscene(string[] dialogueLines, GameObject characterToShow)
     {
-        //GameManager.Instance.PauseGame();
+        //GameManager.Instance.PauseGame(); //this stops doppelganger animation
         InputManager.LockInput();
         isCutsceneActive = true;
 
@@ -33,7 +35,7 @@ public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
         currentLine = 0;
 
         dialogueUI.SetActive(true);
-        dialogueText.text = lines[currentLine];
+        typeCoroutine = StartCoroutine(TypeLine(lines[currentLine]));
 
         if (characterToShow != null)
         {
@@ -44,11 +46,20 @@ public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
 
     private void ShowNextLine()
     {
+        if (isTyping)
+        {
+            // if player presses space mid-typing, finish the line instantly
+            StopCoroutine(typeCoroutine);
+            dialogueText.text = lines[currentLine];
+            isTyping = false;
+            return;
+        }
+
         currentLine++;
 
         if (currentLine < lines.Length)
         {
-            dialogueText.text = lines[currentLine];
+            typeCoroutine = StartCoroutine(TypeLine(lines[currentLine]));
         }
         else
         {
@@ -68,4 +79,18 @@ public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
     }
 
     public bool IsCutsceneActive => isCutsceneActive;
+
+    private IEnumerator TypeLine(string line)
+    {
+        isTyping = true;
+        dialogueText.text = "";
+
+        foreach (char c in line)
+        {
+            dialogueText.text += c;
+            yield return new WaitForSeconds(0.02f); // ttyping speed
+        }
+
+        isTyping = false;
+    }
 }
