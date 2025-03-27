@@ -70,7 +70,9 @@ public class DashTrail : MonoBehaviour
     }
 });
             // seq.Append(sr.material.DOColor(trailColor, 0));
-            seq.Append(DOTween.To(() => sr.color, x => sr.color = x, trailColor, 0f));
+            // seq.Append(DOTween.To(() => sr.color, x => sr.color = x, trailColor, 0f));
+            Color visibleTrailColor = new Color(trailColor.r, trailColor.g, trailColor.b, 1f);
+            seq.Append(DOTween.To(() => sr.color, x => sr.color = x, visibleTrailColor, 0f));
             seq.AppendCallback(() => FadeSprite(sr));
             seq.AppendInterval(afterEffectInterval);
         }
