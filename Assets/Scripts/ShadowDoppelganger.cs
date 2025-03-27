@@ -9,7 +9,8 @@ public class ShadowDoppelganger : MonoBehaviour
     private Vector2 lastPlayerPosition;
     private bool isReactivating = false;
     private float initialSpawnTime;
-
+    private DashTrail dashTrail;
+    private bool wasDashing;
     private ShadowAnimationScript shadowAnim;
 
     private void Start()
@@ -26,6 +27,11 @@ public class ShadowDoppelganger : MonoBehaviour
     {
         col = GetComponent<Collider2D>();
         shadowAnim = GetComponentInChildren<ShadowAnimationScript>();
+        dashTrail = GetComponentInChildren<DashTrail>();
+        if (dashTrail != null && shadowAnim != null)
+        {
+            dashTrail.Initialize(transform, shadowAnim); 
+        }
     }
 
     private void Update()
@@ -47,6 +53,11 @@ public class ShadowDoppelganger : MonoBehaviour
                         snapshot.isDashing
                     );
                 }
+                if (snapshot.isDashing && !wasDashing)
+                {
+                    dashTrail.ShowTrail();
+                }
+                wasDashing = snapshot.isDashing;
             }
         }
 

@@ -1,15 +1,14 @@
 using UnityEngine;
 
-public class ShadowAnimationScript : MonoBehaviour
+public class ShadowAnimationScript : BaseAnimationScript
 {
     private Animator anim;
-    private SpriteRenderer sprite;
     private Vector2 previousPosition;
 
     void Awake()
     {
         anim = GetComponent<Animator>();
-        sprite = GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>(); 
         previousPosition = transform.parent.position;
     }
 
@@ -25,7 +24,6 @@ public class ShadowAnimationScript : MonoBehaviour
         anim.SetBool("isDashing", isDashing);
         anim.SetBool("canMove", true);
 
-        // Triggers (only trigger when new, so they don’t spam)
         if (isJumping && !anim.GetCurrentAnimatorStateInfo(0).IsName("Jumping"))
         {
             anim.SetTrigger("Jumping");
@@ -36,7 +34,6 @@ public class ShadowAnimationScript : MonoBehaviour
             anim.SetTrigger("Dash");
         }
 
-        // Flip
         if (velocity.x > 0.01f)
             sprite.flipX = true;
         else if (velocity.x < -0.01f)
