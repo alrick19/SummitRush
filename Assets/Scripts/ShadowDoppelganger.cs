@@ -8,22 +8,37 @@ public class ShadowDoppelganger : MonoBehaviour
     private Transform playerTransform;
     private Vector2 lastPlayerPosition;
 
+    private ShadowAnimationScript shadowAnim;
+
     private void Awake()
     {
         col = GetComponent<Collider2D>();
+        shadowAnim = GetComponentInChildren<ShadowAnimationScript>();
     }
 
     private void Update()
     {
         if (PlayerMovementTracker.Instance != null)
         {
-            transform.position = PlayerMovementTracker.Instance.GetDelayedPosition();
+            var snapshot = PlayerMovementTracker.Instance.GetDelayedSnapshot();
+            transform.position = snapshot.position;
+
+            // Apply animation state
+            if (shadowAnim != null)
+            {
+                shadowAnim.SetStates(
+                    snapshot.isGrounded,
+                    snapshot.isSliding,
+                    snapshot.isJumping,
+                    snapshot.isDashing
+                );
+            }
         }
 
-        // If waiting for player movement, check if the player has moved
+        // Player movement detection after respawn
         if (waitingForPlayerMove && playerTransform != null)
         {
-            if (Vector2.Distance(playerTransform.position, lastPlayerPosition) > 0.1f) // Player moved
+            if (Vector2.Distance(playerTransform.position, lastPlayerPosition) > 0.1f)
             {
                 waitingForPlayerMove = false;
                 StartCoroutine(EnableCollisionWithDelay());
@@ -45,8 +60,10 @@ public class ShadowDoppelganger : MonoBehaviour
 
     public void ResetDoppelganger(Vector2 respawnPosition, Transform newPlayerTransform)
     {
-        transform.position = respawnPosition;
-        col.enabled = false; // Disable collision to prevent instant kill
+        Vector2 spawnOffset = new Vector2(2f, 0); 
+        transform.position = respawnPosition + spawnOffset;
+
+        col.enabled = false;
 
         playerTransform = newPlayerTransform;
         lastPlayerPosition = playerTransform.position;
