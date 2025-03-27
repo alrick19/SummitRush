@@ -44,6 +44,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
         RoomManager[] rooms = FindObjectsByType<RoomManager>(FindObjectsSortMode.None);
         totalRoomsInLevel = rooms.Length;
         completedRooms = 0;
+        InputManager.UnlockInput();
     }
 
     public void RegisterRoomCompletion()
@@ -67,7 +68,8 @@ public class GameManager : SingletonMonoBehavior<GameManager>
             PlayerPrefs.Save();
         }
 
-        SceneHandler.Instance.LoadScene(SceneUtility.GetScenePathByBuildIndex(currentLevelIndex + 1));
+        string nextSceneName = GetSceneNameFromBuildIndex(currentLevelIndex + 1);
+        SceneHandler.Instance.LoadScene(nextSceneName);
     }
 
     public void PauseGame()
@@ -101,5 +103,12 @@ public class GameManager : SingletonMonoBehavior<GameManager>
     {
         int levelToLoad = Mathf.Clamp(unlockedLevelIndex, 0, SceneManager.sceneCountInBuildSettings - 1);
         SceneHandler.Instance.LoadScene(SceneUtility.GetScenePathByBuildIndex(levelToLoad));
+    }
+
+    private string GetSceneNameFromBuildIndex(int buildIndex)
+    {
+        string path = SceneUtility.GetScenePathByBuildIndex(buildIndex); // e.g. "Assets/Scenes/Level1.unity"
+        string fileName = System.IO.Path.GetFileNameWithoutExtension(path); // "Level1"
+        return fileName;
     }
 }
