@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CutSceneDoppelganger
       objectReference: {fileID: 0}
+    - target: {fileID: 1160356261127867848, guid: 34186b394f8de4855a8d81d3a8052c59, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 1255182458006258132, guid: febe494078fda4538adc2877c73ab161, type: 3}
+    - target: {fileID: 3626916397498700004, guid: 34186b394f8de4855a8d81d3a8052c59, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2685541947410309191, guid: febe494078fda4538adc2877c73ab161, type: 3}
     - target: {fileID: 7878350319992209165, guid: 34186b394f8de4855a8d81d3a8052c59, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
