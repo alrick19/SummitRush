@@ -21,8 +21,10 @@ public class DashTrail : MonoBehaviour
 
     public void FadeSprite(SpriteRenderer sr)
     {
-        sr.material.DOKill();
-        sr.material.DOColor(fadeColor, fadeTime);
+        // sr.material.DOKill();
+        // sr.material.DOColor(fadeColor, fadeTime);
+        sr.DOKill();
+        sr.DOColor(fadeColor, fadeTime);
     }
 
     public void ShowTrail()
@@ -67,7 +69,8 @@ public class DashTrail : MonoBehaviour
         particle.Play();
     }
 });
-            seq.Append(sr.material.DOColor(trailColor, 0));
+            // seq.Append(sr.material.DOColor(trailColor, 0));
+            seq.Append(DOTween.To(() => sr.color, x => sr.color = x, trailColor, 0f));
             seq.AppendCallback(() => FadeSprite(sr));
             seq.AppendInterval(afterEffectInterval);
         }

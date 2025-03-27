@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5630700408751817347, guid: a1f91019ad2684f1b8bba74596155458, type: 3}
+  m_Sprite: {fileID: 7643240275301989466, guid: a1e0c439f2db2416da235fb885ff8c2a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -163,7 +163,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3021421588914328452, guid: a1f91019ad2684f1b8bba74596155458, type: 3}
+  m_Sprite: {fileID: -8809873816130030523, guid: a1e0c439f2db2416da235fb885ff8c2a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -221,10 +221,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f551ba32b971f4b72b88644af12b41ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailColor: {r: 0, g: 1, b: 0.5857136, a: 1}
+  trailColor: {r: 0, g: 1, b: 0.58431375, a: 1}
   fadeColor: {r: 0, g: 1, b: 0.58431375, a: 0}
   afterEffectInterval: 0.05
-  fadeTime: 1
+  fadeTime: 1.3
   dashParticle: {fileID: 2311238074972839921, guid: 4d3bb94042aa740a69d1ed4169c1a42f, type: 3}
 --- !u!1 &8880525349472635496
 GameObject:
@@ -302,7 +302,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -350301785380013227, guid: a1f91019ad2684f1b8bba74596155458, type: 3}
+  m_Sprite: {fileID: 7110878671101974141, guid: a1e0c439f2db2416da235fb885ff8c2a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
