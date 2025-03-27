@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     public float jumpBufferTime = 0.15f; // grace period for jump input before landing
     public float maxJumpTime = 0.2f; // maax time jump is influenced by holding button
     private float lastGroundedTime; // track time since last grounded
-    private float lastJumpInputTime; // track time since jump input
+    private float lastJumpInputTime = -999f; // track time since jump input
     private float jumpStartTime; // track when jump started
 
     [Space]

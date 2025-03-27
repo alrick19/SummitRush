@@ -7,8 +7,20 @@ public class ShadowDoppelganger : MonoBehaviour
     private bool waitingForPlayerMove = true; // Flag to track if we're waiting for movement so there isnt a kill loop on respawn
     private Transform playerTransform;
     private Vector2 lastPlayerPosition;
+    private bool isReactivating = false;
+    private float initialSpawnTime;
 
     private ShadowAnimationScript shadowAnim;
+
+    private void Start()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            PlayerMovementTracker.Instance.SetNewPlayer(player.transform);
+            ResetDoppelganger(player.transform.position, player.transform);
+        }
+    }
 
     private void Awake()
     {
@@ -18,24 +30,26 @@ public class ShadowDoppelganger : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerMovementTracker.Instance != null)
+        
+        if (!isReactivating && !waitingForPlayerMove && PlayerMovementTracker.Instance != null)
         {
-            var snapshot = PlayerMovementTracker.Instance.GetDelayedSnapshot();
-            transform.position = snapshot.position;
-
-            // Apply animation state
-            if (shadowAnim != null)
+            if (PlayerMovementTracker.Instance.HasSnapshots())
             {
-                shadowAnim.SetStates(
-                    snapshot.isGrounded,
-                    snapshot.isSliding,
-                    snapshot.isJumping,
-                    snapshot.isDashing
-                );
+                var snapshot = PlayerMovementTracker.Instance.GetDelayedSnapshot();
+                transform.position = snapshot.position;
+        
+                if (shadowAnim != null)
+                {
+                    shadowAnim.SetStates(
+                        snapshot.isGrounded,
+                        snapshot.isSliding,
+                        snapshot.isJumping,
+                        snapshot.isDashing
+                    );
+                }
             }
         }
 
-        // Player movement detection after respawn
         if (waitingForPlayerMove && playerTransform != null)
         {
             if (Vector2.Distance(playerTransform.position, lastPlayerPosition) > 0.1f)
@@ -60,21 +74,30 @@ public class ShadowDoppelganger : MonoBehaviour
 
     public void ResetDoppelganger(Vector2 respawnPosition, Transform newPlayerTransform)
     {
-        Vector2 spawnOffset = new Vector2(2f, 0); 
-        transform.position = respawnPosition + spawnOffset;
+        transform.position = respawnPosition; // same position as player
 
         col.enabled = false;
-
         playerTransform = newPlayerTransform;
         lastPlayerPosition = playerTransform.position;
         waitingForPlayerMove = true;
+        isReactivating = true;
+
+        initialSpawnTime = Time.time;
 
         PlayerMovementTracker.Instance.ResetMovementHistory();
+
+        StartCoroutine(AllowTrackingAfterDelay(0.5f));
+    }
+
+    private IEnumerator AllowTrackingAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isReactivating = false;
     }
 
     private IEnumerator EnableCollisionWithDelay()
     {
-        yield return new WaitForSeconds(0.2f); // Wait x secs after player moves
-        col.enabled = true; // Re-enable collision
+        yield return new WaitForSeconds(1f); // Wait 1 sec after movement
+        col.enabled = true;
     }
 }
