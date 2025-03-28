@@ -41,6 +41,10 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     public AudioClip wallClimbLoop;//
     public AudioClip dash;//
     public AudioClip death;//
+    public AudioClip item;//
+    public AudioClip complete;//
+    public AudioClip icicle;//
+    public AudioClip fallBlock;//
 
     private AudioClip currentLoopingClip;
 

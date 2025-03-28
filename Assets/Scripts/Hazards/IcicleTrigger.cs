@@ -14,6 +14,7 @@ public class IcicleTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             parentIcicle.TriggerFall();
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.icicle);
         }
     }
 }
