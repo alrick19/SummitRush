@@ -544,24 +544,25 @@ MonoBehaviour:
   level2Music: {fileID: 8300000, guid: 7dc1932085fd84453bd8aec4e10c8b5f, type: 3}
   level3Music: {fileID: 8300000, guid: f2eb6f4b4d84d4b89bec879ad7f32293, type: 3}
   level4Music: {fileID: 8300000, guid: d3b096f3515214b9f9f028c7de97f0cb, type: 3}
-  menuMusic: {fileID: 0}
+  menuMusic: {fileID: 8300000, guid: d3024724c26b749aa81af83006ebce26, type: 3}
   level1Ambient: {fileID: 8300000, guid: 6a47657845ad14c25b55c3913baf3627, type: 3}
   level2Ambient: {fileID: 8300000, guid: bb90a5b0407684a2dbd325961c29dfc6, type: 3}
   level3Ambient: {fileID: 8300000, guid: a104e87f48ddb4ddea126508c3ebb454, type: 3}
   level4Ambient: {fileID: 8300000, guid: 0163d0d5ab3fd42a09135c2e0cf18ffa, type: 3}
   menuAmbient: {fileID: 8300000, guid: 6a47657845ad14c25b55c3913baf3627, type: 3}
-  walkLoop: {fileID: 0}
-  jump: {fileID: 0}
-  land: {fileID: 0}
-  wallGrab: {fileID: 0}
-  wallSlideLoop: {fileID: 0}
-  wallClimbLoop: {fileID: 0}
-  dash: {fileID: 0}
-  death: {fileID: 0}
-  item: {fileID: 0}
+  walkLoop: {fileID: 8300000, guid: 87b2f0227dd0a4a95bdc7555988853b1, type: 3}
+  jump: {fileID: 8300000, guid: 7857a7cbcfad64c8e94c996a8510a4c9, type: 3}
+  land: {fileID: 8300000, guid: 7857a7cbcfad64c8e94c996a8510a4c9, type: 3}
+  wallJump: {fileID: 8300000, guid: 7857a7cbcfad64c8e94c996a8510a4c9, type: 3}
+  wallSlideLoop: {fileID: 8300000, guid: 826f9c4e5a3654236890ef5055da62d2, type: 3}
+  wallClimbLoop: {fileID: 8300000, guid: cf60f2c06319d4fe197d7405632a202b, type: 3}
+  dash: {fileID: 8300000, guid: 826f9c4e5a3654236890ef5055da62d2, type: 3}
+  death: {fileID: 8300000, guid: 98c22e05bfa25417ebb8aca6d28c9710, type: 3}
+  item: {fileID: 8300000, guid: 88c793acada64452ba8e24dc909f5343, type: 3}
   complete: {fileID: 0}
-  icicle: {fileID: 0}
-  fallBlock: {fileID: 0}
+  icicle: {fileID: 8300000, guid: ebf66ca5df2734c8a981276a4ff12b3e, type: 3}
+  fallBlock: {fileID: 8300000, guid: 3e8e3ee01416e4757b22e92ae67ca66b, type: 3}
+  trampoline: {fileID: 8300000, guid: 385f4ba0702294b789ae8875c1f32c10, type: 3}
 --- !u!4 &998017614
 Transform:
   m_ObjectHideFlags: 0
@@ -1369,7 +1370,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

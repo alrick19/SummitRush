@@ -63,8 +63,7 @@ public class Player : MonoBehaviour
     [Header("Special Effects")]
     public ParticleSystem jumpParticle;
 
-    private AudioClip currentWallSFX = null;
-    private bool isWalkingSFXPlaying = false;
+
     private bool wasGroundedLastFrame = false;
 
 
@@ -89,8 +88,7 @@ public class Player : MonoBehaviour
         verticalMove = InputManager.GetVertical();
 
         StateChecks();
-        HandleWallMovementSFX();
-        HandleWalkingSFX();
+        HandleLoopSFX();
     }
 
     private void StateChecks()
@@ -169,67 +167,15 @@ public class Player : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
         }
     }
-    private void HandleWalkingSFX()
+    private void HandleLoopSFX()
     {
         bool isWalking = Mathf.Abs(horizontalMove) > 0.01f && collision.isGrounded && !isGrabbing && !isSliding && !isDashing;
-
-        if (isWalking)
-        {
-            if (!isWalkingSFXPlaying)
-            {
-                AudioManager.Instance.PlayLoopingSFX(AudioManager.Instance.walkLoop);
-                isWalkingSFXPlaying = true;
-            }
-        }
-        else
-        {
-            if (isWalkingSFXPlaying)
-            {
-                AudioManager.Instance.StopLoopingSFX(AudioManager.Instance.walkLoop);
-                isWalkingSFXPlaying = false;
-            }
-        }
-    }
-
-    private void HandleWallMovementSFX()
-    {
-        if (!collision.isWalled || collision.isGrounded || isDashing)
-        {
-            if (currentWallSFX != null)
-            {
-                AudioManager.Instance.StopLoopingSFX();
-                currentWallSFX = null;
-            }
-            return;
-        }
-
-        bool climbing = isGrabbing && verticalMove > 0;
+        bool climbing = isGrabbing && verticalMove != 0;
         bool sliding = isSliding && !isGrabbing && rb.linearVelocity.y < -0.1f;
-
-        AudioClip targetClip = null;
-
-        if (climbing)
-        {
-            targetClip = AudioManager.Instance.wallClimbLoop;
-        }
-        else if (sliding)
-        {
-            targetClip = AudioManager.Instance.wallSlideLoop;
-        }
-
-        if (targetClip != currentWallSFX)
-        {
-            if (targetClip != null)
-            {
-                AudioManager.Instance.PlayLoopingSFX(targetClip);
-            }
-            else
-            {
-                AudioManager.Instance.StopLoopingSFX();
-            }
-
-            currentWallSFX = targetClip;
-        }
+        if (isWalking)  AudioManager.Instance.PlayLoop(AudioManager.Instance.walkLoop);
+        else if (climbing)   AudioManager.Instance.PlayLoop(AudioManager.Instance.wallClimbLoop);
+        else if (sliding)   AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
+        else    AudioManager.Instance.StopLoop();
     }
 
     private void WallSlide()
@@ -257,7 +203,6 @@ public class Player : MonoBehaviour
 
     private void WallGrab()
     {
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.wallGrab);
         rb.gravityScale = ZERO_GRAVITY;
 
         // Prevents character from keeping y momentum while grabbing
@@ -306,7 +251,7 @@ public class Player : MonoBehaviour
 
     private void WallJump()
     {
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.jump);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.wallJump);
         // reset grabbing and sliding
         isGrabbing = false;
         isSliding = false;

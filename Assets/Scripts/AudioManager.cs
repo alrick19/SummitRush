@@ -36,7 +36,7 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     public AudioClip walkLoop;//
     public AudioClip jump;//
     public AudioClip land;
-    public AudioClip wallGrab; //
+    public AudioClip wallJump;//
     public AudioClip wallSlideLoop;//
     public AudioClip wallClimbLoop;//
     public AudioClip dash;//
@@ -45,10 +45,8 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     public AudioClip complete;//
     public AudioClip icicle;//
     public AudioClip fallBlock;//
-
-    private AudioClip currentLoopingClip;
-
-
+    public AudioClip trampoline;//
+    
 
 
     protected override void Awake()
@@ -135,24 +133,14 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
         }
     }
 
-    public void PlayMenuMusic()
+    public void PauseLevelMusic()
     {
-        if (menuMusic != null && musicSource.clip != menuMusic)
-        {
-            musicSource.clip = menuMusic;
-            musicSource.loop = true;
-            musicSource.Play();
-        }
+        musicSource.Pause();
     }
 
     public void ResumeLevelMusic()
     {
-        if (currentLevelMusic != null && musicSource.clip != currentLevelMusic)
-        {
-            musicSource.clip = currentLevelMusic;
-            musicSource.loop = true;
-            musicSource.Play();
-        }
+        musicSource.Play();
     }
 
     public void PlaySFX(AudioClip clip)
@@ -163,25 +151,23 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
         }
     }
 
-    public void PlayLoopingSFX(AudioClip clip)
+    public void PlayLoop(AudioClip clip)
     {
-        if (loopingSFXSource == null || clip == null) return;
+        if (clip == null || loopingSFXSource.clip == clip) return;
 
-        if (loopingSFXSource.clip != clip)
-        {
-            loopingSFXSource.clip = clip;
-            loopingSFXSource.Play();
-            currentLoopingClip = clip;
-        }
+        loopingSFXSource.clip = clip;
+        loopingSFXSource.loop = true;
+        loopingSFXSource.Play();
     }
 
-    public void StopLoopingSFX(AudioClip clip = null)
+    public void StopLoop(AudioClip clip = null)
     {
-        if (loopingSFXSource != null && (clip == null || loopingSFXSource.clip == clip))
+        if (loopingSFXSource == null) return;
+
+        if (clip == null || loopingSFXSource.clip == clip)
         {
             loopingSFXSource.Stop();
             loopingSFXSource.clip = null;
-            currentLoopingClip = null;
         }
     }
 }
