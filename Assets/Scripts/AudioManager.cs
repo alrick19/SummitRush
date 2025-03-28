@@ -4,10 +4,17 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-99)]
 public class AudioManager : SingletonMonoBehavior<AudioManager>
 {
+    [Header("Volume Settings")]
+    [Range(0f, 1f)] public float musicVolume = 1f;
+    [Range(0f, 1f)] public float ambientVolume = 0.5f;
+    [Range(0f, 1f)] public float sfxVolume = 1f;
+    [Range(0f, 1f)] public float loopSFXVolume = 1f;
+
     [Header("--- Audio Source ---")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource SFXSource;
     [SerializeField] private AudioSource loopingSFXSource;
+    [SerializeField] private AudioSource ambientSource; //  like wind
 
     [Header("--- Level Music Clips ---")]
     public AudioClip level1Music;
@@ -17,6 +24,13 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     public AudioClip menuMusic; 
 
     private AudioClip currentLevelMusic;
+
+    [Header("--- Ambient Layer Clips ---")]
+    public AudioClip level1Ambient;
+    public AudioClip level2Ambient;
+    public AudioClip level3Ambient;
+    public AudioClip level4Ambient;
+    public AudioClip MenuAmbient;
 
     [Header("--- SFX Clips ---")]
     public AudioClip walkLoop;//
@@ -31,15 +45,29 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     private AudioClip currentLoopingClip;
 
 
+
+
     protected override void Awake()
     {
         base.Awake();
+
+        if (ambientSource == null)
+        {
+            ambientSource = gameObject.AddComponent<AudioSource>();
+            ambientSource.loop = true;
+            ambientSource.playOnAwake = false;
+        }
         if (loopingSFXSource == null)
         {
             loopingSFXSource = gameObject.AddComponent<AudioSource>();
             loopingSFXSource.loop = true;
             loopingSFXSource.playOnAwake = false;
         }
+
+        musicSource.volume = musicVolume;
+        SFXSource.volume = sfxVolume;
+        loopingSFXSource.volume = loopSFXVolume;
+        ambientSource.volume = ambientVolume;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -56,23 +84,29 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     private void PlayLevelMusic(string sceneName)
     {
         AudioClip clipToPlay = null;
+        AudioClip ambientClip = null;
 
         switch (sceneName)
         {
             case "Level1":
                 clipToPlay = level1Music;
+                ambientClip = level1Ambient;
                 break;
             case "Level2":
                 clipToPlay = level2Music;
+                ambientClip = level2Ambient;
                 break;
             case "Level3":
                 clipToPlay = level3Music;
+                ambientClip = level3Ambient;
                 break;
             case "Level4":
                 clipToPlay = level4Music;
+                ambientClip = level4Ambient;
                 break;
             default:
                 clipToPlay = menuMusic;
+                ambientClip = menuAmbient;
                 break;
         }
 
@@ -82,6 +116,18 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
             musicSource.clip = clipToPlay;
             musicSource.loop = true;
             musicSource.Play();
+        }
+
+        if (ambientClip != null)
+        {
+            ambientSource.clip = ambientClip;
+            ambientSource.loop = true;
+            ambientSource.Play();
+        }
+        else
+        {
+            ambientSource.Stop();
+            ambientSource.clip = null;
         }
     }
 
