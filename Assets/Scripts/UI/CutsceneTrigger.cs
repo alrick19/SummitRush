@@ -5,6 +5,7 @@ public class CutsceneTrigger : MonoBehaviour
     public string[] dialogueLines;
     public GameObject characterToShow; //cutscene doppelganger
     private bool triggered = false;
+    public CutsceneManager cutsceneManager;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -13,7 +14,7 @@ public class CutsceneTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             triggered = true;
-            CutsceneManager.Instance.StartCutscene(dialogueLines, characterToShow);
+            cutsceneManager.StartCutscene(dialogueLines, characterToShow);
         }
     }
 }

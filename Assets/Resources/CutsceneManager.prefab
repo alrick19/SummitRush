@@ -85,8 +85,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7333170204654800385}
+  - component: {fileID: 45507340549896570}
   m_Layer: 0
-  m_Name: Cutscene
+  m_Name: CutsceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,11 +107,25 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2306364815246657174}
-  - {fileID: 6880884230216226351}
   - {fileID: 845249472959743044}
   - {fileID: 3174425687931104546}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &45507340549896570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4263511059219045070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 542b8b20fdd94465fa5d7ccafb5735b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueUI: {fileID: 2649186107180429992}
+  dialogueText: {fileID: 5007677161802450541}
+  characterVisual: {fileID: 0}
 --- !u!1 &4280245096550532354
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,53 +228,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1 &5044115404882547819
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6880884230216226351}
-  - component: {fileID: 9116935926056068508}
-  m_Layer: 0
-  m_Name: CutsceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6880884230216226351
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5044115404882547819}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7333170204654800385}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9116935926056068508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5044115404882547819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 542b8b20fdd94465fa5d7ccafb5735b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueUI: {fileID: 2649186107180429992}
-  dialogueText: {fileID: 5007677161802450541}
-  characterVisual: {fileID: 0}
 --- !u!1 &7035594044453949684
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,6 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines: []
   characterToShow: {fileID: 3309055130732277491}
+  cutsceneManager: {fileID: 45507340549896570}
 --- !u!61 &7746928121759981316
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -3,23 +3,9 @@ using Unity.Cinemachine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-
 public class KillPlayer : MonoBehaviour
 {
-    private static Vector2 respawnPoint;
     private static bool isRespawning = false;
-
-    private void Start()
-    {
-        if (respawnPoint == Vector2.zero) // Set initial respawn point to the player's start position
-        {
-            GameObject player = FindPlayer();
-            if (player != null)
-            {
-                respawnPoint = player.transform.position;
-            }
-        }
-    }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -29,15 +15,9 @@ public class KillPlayer : MonoBehaviour
         }
     }
 
-    public void SetRespawnPoint(Vector2 newRespawnPoint)
-    {
-        respawnPoint = newRespawnPoint;
-    }
-
     public IEnumerator RespawnPlayer(GameObject player)
     {
-        if (isRespawning)
-            yield break;
+        if (isRespawning) yield break;
 
         isRespawning = true;
 
@@ -57,7 +37,7 @@ public class KillPlayer : MonoBehaviour
                 PlayerMovementTracker.Instance.SetNewPlayer(newPlayer.transform);
             }
 
-            ResetDoppelganger(respawnPoint, newPlayer.transform);
+            ResetDoppelganger(LevelManager.Instance.GetRespawnPoint(), newPlayer.transform);
         }
 
         isRespawning = false;
@@ -71,28 +51,16 @@ public class KillPlayer : MonoBehaviour
             cameraRoomManager.ResetCollectibles();
             cameraRoomManager.ResetHazards();
         }
-        
     }
 
     private GameObject SpawnNewPlayer()
     {
-        GameObject existingPlayer = FindPlayer();
-
-        if (existingPlayer != null && !existingPlayer.Equals(null))
-        {
-            existingPlayer.transform.position = respawnPoint;
-            return existingPlayer;
-        }
-
+        Vector2 respawnPosition = LevelManager.Instance.GetRespawnPoint();
         GameObject playerPrefab = Resources.Load<GameObject>("Player");
-        GameObject newPlayer = Instantiate(playerPrefab, respawnPoint, Quaternion.identity);
-  
-        return newPlayer;
-    }
 
-    private GameObject FindPlayer()
-    {
-        return GameObject.FindGameObjectWithTag("Player");
+        GameObject newPlayer = Instantiate(playerPrefab, respawnPosition, Quaternion.identity);
+        LevelManager.Instance.SetPlayer(newPlayer);
+        return newPlayer;
     }
 
     private void ResetDoppelganger(Vector2 newPosition, Transform newPlayerTransform)
