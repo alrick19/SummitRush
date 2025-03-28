@@ -7,6 +7,7 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     [Header("--- Audio Source ---")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource SFXSource;
+    [SerializeField] private AudioSource loopingSFXSource;
 
     [Header("--- Level Music Clips ---")]
     public AudioClip level1Music;
@@ -18,17 +19,27 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     private AudioClip currentLevelMusic;
 
     [Header("--- SFX Clips ---")]
-    public AudioClip run;
-    public AudioClip jump;
+    public AudioClip walkLoop;//
+    public AudioClip jump;//
     public AudioClip land;
-    public AudioClip wallGrab;
-    public AudioClip Climb;
-    public AudioClip Dash;
+    public AudioClip wallGrab //
+    public AudioClip wallSlideLoop;//
+    public AudioClip wallClimbLoop;//
+    public AudioClip dash;//
+    public AudioClip death;//
+
+    private AudioClip currentLoopingClip;
+
 
     protected override void Awake()
     {
         base.Awake();
-
+        if (loopingSFXSource == null)
+        {
+            loopingSFXSource = gameObject.AddComponent<AudioSource>();
+            loopingSFXSource.loop = true;
+            loopingSFXSource.playOnAwake = false;
+        }
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -99,6 +110,28 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
         if (SFXSource != null && clip != null)
         {
             SFXSource.PlayOneShot(clip);
+        }
+    }
+
+    public void PlayLoopingSFX(AudioClip clip)
+    {
+        if (loopingSFXSource == null || clip == null) return;
+
+        if (loopingSFXSource.clip != clip)
+        {
+            loopingSFXSource.clip = clip;
+            loopingSFXSource.Play();
+            currentLoopingClip = clip;
+        }
+    }
+
+    public void StopLoopingSFX(AudioClip clip = null)
+    {
+        if (loopingSFXSource != null && (clip == null || loopingSFXSource.clip == clip))
+        {
+            loopingSFXSource.Stop();
+            loopingSFXSource.clip = null;
+            currentLoopingClip = null;
         }
     }
 }

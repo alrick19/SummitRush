@@ -39,6 +39,7 @@ public class PauseHandler : MonoBehaviour
         GameManager.Instance.PauseGame();
         pauseMenuUI.SetActive(true);
         InputManager.LockInput();
+        AudioManager.Instance.PlayMenuMusic();
     }
 
     public void Resume()
@@ -53,6 +54,7 @@ public class PauseHandler : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.2f);
 
         GameManager.Instance.ResumeGame();
+        AudioManager.Instance.ResumeLevelMusic();
 
         yield return null; 
 
