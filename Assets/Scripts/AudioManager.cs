@@ -22,7 +22,7 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     public AudioClip walkLoop;//
     public AudioClip jump;//
     public AudioClip land;
-    public AudioClip wallGrab //
+    public AudioClip wallGrab; //
     public AudioClip wallSlideLoop;//
     public AudioClip wallClimbLoop;//
     public AudioClip dash;//
