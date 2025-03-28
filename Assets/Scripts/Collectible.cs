@@ -13,6 +13,7 @@ public class Collectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.item);
             roomManager?.RegisterCollectible();
             gameObject.SetActive(false);
         }
