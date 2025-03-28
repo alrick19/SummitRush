@@ -19,6 +19,7 @@ public class Trampoline : MonoBehaviour
             Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.trampoline);
                 animator.SetTrigger("Bounce");
                 rb.linearVelocity = new Vector2(rb.linearVelocityX, bounceForce);
                 player.isJumping = true;

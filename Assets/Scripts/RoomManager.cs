@@ -25,7 +25,7 @@ public class RoomManager : MonoBehaviour
             if (doorToNextRoom)
             {
                 doorToNextRoom.SetActive(false); // unlock next room
-
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.complete);
             }
 
             GameManager.Instance.RegisterRoomCompletion();

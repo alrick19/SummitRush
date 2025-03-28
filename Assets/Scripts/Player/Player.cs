@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     private Collision collision;
     private AnimationScript anim;
     private DashTrail dashTrail;
+    
 
     [Header("Movement Stats")]
     public float moveSpeed = 10f; // max speed
@@ -63,6 +64,9 @@ public class Player : MonoBehaviour
     public ParticleSystem jumpParticle;
 
 
+    private bool wasGroundedLastFrame = false;
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -84,6 +88,7 @@ public class Player : MonoBehaviour
         verticalMove = InputManager.GetVertical();
 
         StateChecks();
+        HandleLoopSFX();
     }
 
     private void StateChecks()
@@ -162,6 +167,16 @@ public class Player : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
         }
     }
+    private void HandleLoopSFX()
+    {
+        bool isWalking = Mathf.Abs(horizontalMove) > 0.01f && collision.isGrounded && !isGrabbing && !isSliding && !isDashing;
+        bool climbing = isGrabbing && verticalMove != 0;
+        bool sliding = isSliding && !isGrabbing && rb.linearVelocity.y < -0.1f;
+        if (isWalking)  AudioManager.Instance.PlayLoop(AudioManager.Instance.walkLoop);
+        else if (climbing)   AudioManager.Instance.PlayLoop(AudioManager.Instance.wallClimbLoop);
+        else if (sliding)   AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
+        else    AudioManager.Instance.StopLoop();
+    }
 
     private void WallSlide()
     {
@@ -180,7 +195,10 @@ public class Player : MonoBehaviour
             pushForce = rb.linearVelocity.x; // preserve momentum otherwise
         }
         if (isSliding /* && !collision.isGrounded */)
+        {
             rb.linearVelocity = new Vector2(pushForce, -slideSpeed);
+        }
+            
     }
 
     private void WallGrab()
@@ -222,6 +240,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Jump() //execute jump
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.jump);
         anim.SetTrigger("Jumping");
         jumpParticle.Play();
 
@@ -232,6 +251,7 @@ public class Player : MonoBehaviour
 
     private void WallJump()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.wallJump);
         // reset grabbing and sliding
         isGrabbing = false;
         isSliding = false;
@@ -287,9 +307,18 @@ public class Player : MonoBehaviour
     /// </summary>
     private void CheckGrounded()
     {
+        bool justLanded = !wasGroundedLastFrame && collision.isGrounded && rb.linearVelocity.y <= 0;
+
+        if (justLanded)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.land);
+        }
+
+        wasGroundedLastFrame = collision.isGrounded;
+
         if (collision.isGrounded && rb.linearVelocity.y <= 0)
         {
-            isJumping = false; // Reset jumping state when grounded
+            isJumping = false;
         }
     }
 
@@ -353,6 +382,7 @@ public class Player : MonoBehaviour
 
     private void Dash(float xDir, float yDir)
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.dash);
         CameraShake.Shake(0.2f, 5f);
         hasDashed = true;
         anim.SetTrigger("Dash");

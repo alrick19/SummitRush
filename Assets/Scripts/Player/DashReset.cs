@@ -21,6 +21,7 @@ public class DashReset : MonoBehaviour
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.item);
                 player.ResetDash();
                 StartCoroutine(Collect());
             }

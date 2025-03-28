@@ -59,6 +59,7 @@ public class FallingBlock : MonoBehaviour, IResettableHazard
         hasFallen = true;
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = 2f;
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.fallBlock);
     }
 
     public void ResetHazard()
