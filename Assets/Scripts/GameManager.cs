@@ -40,7 +40,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
     public void InitializeLevel()
     {
         ResetLevelProgress();
-
+        
         RoomManager[] rooms = FindObjectsByType<RoomManager>(FindObjectsSortMode.None);
         totalRoomsInLevel = rooms.Length;
         completedRooms = 0;
