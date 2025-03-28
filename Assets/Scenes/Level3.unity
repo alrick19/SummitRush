@@ -386,7 +386,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4263511059219045070, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
       propertyPath: m_Name
-      value: Cutscene
+      value: CutsceneManager
       objectReference: {fileID: 0}
     - target: {fileID: 5007677161802450541, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
       propertyPath: m_text
@@ -52356,6 +52356,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2161473758200232345, guid: d2b9216b04da24e458e41e3c8590c832, type: 3}
   m_PrefabInstance: {fileID: 956302570}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1351462687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1351462689}
+  - component: {fileID: 1351462688}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1351462688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351462687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f2e5dea4b0b4d8da7120793b175ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultRespawnPoint: {fileID: 0}
+--- !u!4 &1351462689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351462687}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.8, y: 14.6, z: 19.539396}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1360776717 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2161473758200232345, guid: d2b9216b04da24e458e41e3c8590c832, type: 3}
@@ -52375,11 +52420,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7043311006569331710, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.15
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 7043311006569331710, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15
+      value: 14.97
       objectReference: {fileID: 0}
     - target: {fileID: 7043311006569331710, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
       propertyPath: m_LocalPosition.z
@@ -53002,6 +53047,10 @@ PrefabInstance:
     - target: {fileID: 849344700265333770, guid: 20ef8e393d3cb4fbaa5ab36d4e053591, type: 3}
       propertyPath: m_Name
       value: RespawnPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 849344700265333770, guid: 20ef8e393d3cb4fbaa5ab36d4e053591, type: 3}
+      propertyPath: m_TagString
+      value: InitialSpawn
       objectReference: {fileID: 0}
     - target: {fileID: 5289573070875414784, guid: 20ef8e393d3cb4fbaa5ab36d4e053591, type: 3}
       propertyPath: m_LocalPosition.x
@@ -58508,3 +58557,4 @@ SceneRoots:
   - {fileID: 703930277}
   - {fileID: 302600226}
   - {fileID: 600840472}
+  - {fileID: 1351462689}

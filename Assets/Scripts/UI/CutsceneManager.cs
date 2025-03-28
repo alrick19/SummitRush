@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
-public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
+public class CutsceneManager : MonoBehaviour
 {
     public GameObject dialogueUI;
     public TextMeshProUGUI dialogueText;    
@@ -27,7 +27,6 @@ public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
 
     public void StartCutscene(string[] dialogueLines, GameObject characterToShow)
     {
-        //GameManager.Instance.PauseGame(); //this stops doppelganger animation
         InputManager.LockInput();
         isCutsceneActive = true;
 
@@ -74,7 +73,6 @@ public class CutsceneManager : SingletonMonoBehavior<CutsceneManager>
 
         if (characterVisual) characterVisual.SetActive(false);
 
-        //GameManager.Instance.ResumeGame();
         InputManager.UnlockInput();
     }
 
