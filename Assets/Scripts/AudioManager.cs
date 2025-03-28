@@ -30,7 +30,7 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     public AudioClip level2Ambient;
     public AudioClip level3Ambient;
     public AudioClip level4Ambient;
-    public AudioClip MenuAmbient;
+    public AudioClip menuAmbient;
 
     [Header("--- SFX Clips ---")]
     public AudioClip walkLoop;//
