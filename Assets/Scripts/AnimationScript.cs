@@ -1,15 +1,12 @@
-using System;
-using System.Net;
 using UnityEngine;
 
-public class AnimationScript : MonoBehaviour
+public class AnimationScript : BaseAnimationScript
 {
     [SerializeField] private ParticleSystem runDust;
 
     private Animator anim;
     private Player playerMove;
     private Collision coll;
-    public SpriteRenderer sprite;
     private float verticalVelocity;
 
     void Awake()
@@ -17,7 +14,7 @@ public class AnimationScript : MonoBehaviour
         anim = GetComponent<Animator>();
         playerMove = GetComponentInParent<Player>();
         coll = GetComponentInParent<Collision>();
-        sprite = GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>(); 
     }
 
     void Update()
@@ -29,36 +26,30 @@ public class AnimationScript : MonoBehaviour
         anim.SetBool("isGrabbing", playerMove.isGrabbing);
         anim.SetBool("isDashing", playerMove.isDashing);
         anim.SetBool("canMove", playerMove.canMove);
-
         anim.SetBool("isGrounded", coll.isGrounded);
         anim.SetBool("isSliding", playerMove.isSliding);
         HandleSpriteFlip();
-        runParticle();
+        RunParticle();
     }
 
     public void HandleSpriteFlip()
     {
-        // prevent flipping mid-climb/grab
-        if (playerMove.isGrabbing && coll.rightWalled || coll.leftWalled)
+        if (playerMove.isGrabbing && (coll.rightWalled || coll.leftWalled))
             return;
 
-        if (playerMove.horizontalMove > 0.01)
+        if (playerMove.horizontalMove > 0.01f)
         {
             sprite.flipX = true;
-            flipRunParticle(true);
-
-
+            FlipRunParticle(true);
         }
-        else if (playerMove.horizontalMove < -0.01)
+        else if (playerMove.horizontalMove < -0.01f)
         {
             sprite.flipX = false;
-            flipRunParticle(false);
-
-
+            FlipRunParticle(false);
         }
     }
 
-    private void runParticle()
+    private void RunParticle()
     {
         bool isRunning = playerMove.horizontalMove != 0;
         if (coll.isGrounded && isRunning)
@@ -78,9 +69,8 @@ public class AnimationScript : MonoBehaviour
         anim.SetTrigger(trigger);
     }
 
-    private void flipRunParticle(bool lookingRight)
+    private void FlipRunParticle(bool lookingRight)
     {
-        var particleDir = runDust.forceOverLifetime.x;
         if (lookingRight)
         {
             runDust.transform.localPosition = new Vector3(-0.85f, -0.75f, 0);
@@ -92,6 +82,4 @@ public class AnimationScript : MonoBehaviour
             runDust.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
     }
-
-
 }

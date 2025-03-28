@@ -1,44 +1,88 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct MovementSnapshot
+{
+    public Vector2 position;
+    public bool isJumping;
+    public bool isDashing;
+    public bool isGrounded;
+    public bool isSliding;
+
+    public MovementSnapshot(Vector2 position, bool isJumping, bool isDashing, bool isGrounded, bool isSliding)
+    {
+        this.position = position;
+        this.isJumping = isJumping;
+        this.isDashing = isDashing;
+        this.isGrounded = isGrounded;
+        this.isSliding = isSliding;
+    }
+}
+
 public class PlayerMovementTracker : SingletonMonoBehavior<PlayerMovementTracker>
 {
     private Transform playerPrefab; 
-    [SerializeField] private float delayTime = 1.5f; // Time delay in seconds
+    [SerializeField] private float delayTime = 1.5f;
 
-    private Queue<(Vector2 position, float timeStamp)> movementHistory = new Queue<(Vector2, float)>();
+    private Queue<PlayerStateSnapshot> movementHistory = new Queue<PlayerStateSnapshot>();
+
+    private struct PlayerStateSnapshot
+    {
+        public Vector2 position;
+        public float timeStamp;
+        public bool isJumping;
+        public bool isDashing;
+        public bool isGrounded;
+        public bool isSliding;
+    }
 
     void Update()
     {
-        // ensure we are tracking the player
-        if  (playerPrefab == null)
+        if (playerPrefab == null || playerPrefab.Equals(null))
         {
+            playerPrefab = null;
+            return;
+        }
+
+        if (playerPrefab == null)
             FindPlayer();
-        }
 
-        if  (playerPrefab != null)
+        if (playerPrefab != null)
         {
-            // Store the player's position along with the current time
-            movementHistory.Enqueue((playerPrefab.position, Time.time));
+            Player player = playerPrefab.GetComponent<Player>();
+            Collision collision = playerPrefab.GetComponent<Collision>();
+
+            PlayerStateSnapshot snapshot = new PlayerStateSnapshot
+            {
+                position = playerPrefab.position,
+                timeStamp = Time.time,
+                isJumping = player.isJumping,
+                isDashing = player.isDashing,
+                isGrounded = collision.isGrounded,
+                isSliding = player.isSliding
+            };
+
+            movementHistory.Enqueue(snapshot);
         }
 
-        // reemove positions older than the delay time
         while (movementHistory.Count > 0 && Time.time - movementHistory.Peek().timeStamp > delayTime)
         {
             movementHistory.Dequeue();
         }
     }
 
-    public Vector2 GetDelayedPosition()
+    public MovementSnapshot GetDelayedSnapshot()
     {
-        // If we have a valid delayed position, return it
+        if (playerPrefab == null || playerPrefab.Equals(null))
+            return new MovementSnapshot();
+
         if (movementHistory.Count > 0)
         {
-            return movementHistory.Peek().position;
+            var s = movementHistory.Peek();
+            return new MovementSnapshot(s.position, s.isJumping, s.isDashing, s.isGrounded, s.isSliding);
         }
 
-        // If no history exists yet, just return the current player position
-        return playerPrefab != null ? playerPrefab.position : Vector2.zero;
+        return new MovementSnapshot(playerPrefab.position, false, false, true, false);
     }
 
     public void ResetMovementHistory()
@@ -46,7 +90,6 @@ public class PlayerMovementTracker : SingletonMonoBehavior<PlayerMovementTracker
         movementHistory.Clear();
     }
 
-    // Finds the latest player instance in the scene
     private void FindPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -56,10 +99,14 @@ public class PlayerMovementTracker : SingletonMonoBehavior<PlayerMovementTracker
         }
     }
 
-    // Call this when a new player spawns to update tracking
     public void SetNewPlayer(Transform newPlayer)
     {
         playerPrefab = newPlayer;
-        ResetMovementHistory(); // Clear old data to sync with new player
+        ResetMovementHistory();
+    }
+
+    public bool HasSnapshots()
+    {
+        return movementHistory.Count > 0;
     }
 }

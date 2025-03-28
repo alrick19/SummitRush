@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 
 public class KillPlayer : MonoBehaviour
@@ -28,15 +29,6 @@ public class KillPlayer : MonoBehaviour
         }
     }
 
-    // private void OnTriggerEnter2D(Collider2D other)
-    // {
-    //     if (other.gameObject.CompareTag("Player") && !isRespawning)
-    //     {
-    //         StartCoroutine(RespawnPlayer(other.gameObject));
-
-    //     }
-    // }
-
     public void SetRespawnPoint(Vector2 newRespawnPoint)
     {
         respawnPoint = newRespawnPoint;
@@ -44,24 +36,29 @@ public class KillPlayer : MonoBehaviour
 
     public IEnumerator RespawnPlayer(GameObject player)
     {
+        if (isRespawning)
+            yield break;
+
         isRespawning = true;
 
-        Destroy(player); // Destroy the player
+        Destroy(player);
 
         ResetRoom();
-        yield return new WaitForSeconds(0.5f); // Wait before respawning
+        yield return new WaitForSeconds(0.5f);
 
-        // Find or instantiate the player at the respawn point
         GameObject newPlayer = SpawnNewPlayer();
 
-        // Update movement tracker with the new player
-        PlayerMovementTracker.Instance.SetNewPlayer(newPlayer.transform);
-
-        //update camera tracking
         UpdateAllCamerasFollowTarget(newPlayer.transform);
 
-        // Move Doppelgä=anger and reset tracking
-        ResetDoppelganger(respawnPoint, newPlayer.transform);
+        if (SceneManager.GetActiveScene().name == "Level4")
+        {
+            if (PlayerMovementTracker.Instance != null)
+            {
+                PlayerMovementTracker.Instance.SetNewPlayer(newPlayer.transform);
+            }
+
+            ResetDoppelganger(respawnPoint, newPlayer.transform);
+        }
 
         isRespawning = false;
     }
@@ -79,16 +76,17 @@ public class KillPlayer : MonoBehaviour
 
     private GameObject SpawnNewPlayer()
     {
-        // check for existing player first 
         GameObject existingPlayer = FindPlayer();
-        if (existingPlayer != null)
+
+        if (existingPlayer != null && !existingPlayer.Equals(null))
         {
             existingPlayer.transform.position = respawnPoint;
             return existingPlayer;
         }
 
-        // Otherwise, instantiate a new player
-        GameObject newPlayer = Instantiate(Resources.Load<GameObject>("Player"), respawnPoint, Quaternion.identity);
+        GameObject playerPrefab = Resources.Load<GameObject>("Player");
+        GameObject newPlayer = Instantiate(playerPrefab, respawnPoint, Quaternion.identity);
+  
         return newPlayer;
     }
 

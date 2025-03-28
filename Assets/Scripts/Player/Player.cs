@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     private Collision collision;
     private AnimationScript anim;
+    private DashTrail dashTrail;
 
     [Header("Movement Stats")]
     public float moveSpeed = 10f; // max speed
@@ -19,7 +20,7 @@ public class Player : MonoBehaviour
     public float jumpBufferTime = 0.15f; // grace period for jump input before landing
     public float maxJumpTime = 0.2f; // maax time jump is influenced by holding button
     private float lastGroundedTime; // track time since last grounded
-    private float lastJumpInputTime; // track time since jump input
+    private float lastJumpInputTime = -999f; // track time since jump input
     private float jumpStartTime; // track when jump started
 
     [Space]
@@ -61,13 +62,20 @@ public class Player : MonoBehaviour
     [Header("Special Effects")]
     public ParticleSystem jumpParticle;
 
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         collision = GetComponent<Collision>();
         anim = GetComponentInChildren<AnimationScript>();
 
-        rb.gravityScale = baseGravity; // default gravity
+        dashTrail = GetComponentInChildren<DashTrail>();
+        if (dashTrail != null)
+        {
+            dashTrail.Initialize(transform, anim);
+        }
+
+        rb.gravityScale = baseGravity;
     }
 
     private void Update()
@@ -326,18 +334,17 @@ public class Player : MonoBehaviour
 
     IEnumerator DashTime(float time)
     {
-        FindFirstObjectByType<DashTrail>().ShowTrail();
+        if (dashTrail != null)
+            dashTrail.ShowTrail();
+    
         wallJumped = true;
         isDashing = true;
-
-        // zero gravity for the dash to be linear
+    
         rb.gravityScale = ZERO_GRAVITY;
-        // air drag for the dash to feel fast but not long (distance)
         rb.linearDamping = dashAirDrag;
-
+    
         yield return new WaitForSeconds(time);
-
-        // set everything back to base after dash timing
+    
         rb.gravityScale = baseGravity;
         rb.linearDamping = 0;
         wallJumped = false;
