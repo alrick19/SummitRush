@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 [DefaultExecutionOrder(-99)]
 public class AudioManager : SingletonMonoBehavior<AudioManager>
@@ -80,7 +81,13 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        PlayLevelMusic(scene.name);
+        StartCoroutine(PlayLevelMusicDelayed(scene.name));
+    }
+
+    private IEnumerator PlayLevelMusicDelayed(string sceneName)
+    {
+        yield return null; // wait 1 frame to allow AudioSource to re-enable
+        PlayLevelMusic(sceneName);
     }
 
     private void PlayLevelMusic(string sceneName)
