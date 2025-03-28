@@ -306,7 +306,7 @@ public class Player : MonoBehaviour
 
     private void WallJump()
     {
-        AAudioManager.Instance.PlaySFX(AudioManager.Instance.jump);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.jump);
         // reset grabbing and sliding
         isGrabbing = false;
         isSliding = false;
