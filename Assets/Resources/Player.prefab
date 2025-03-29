@@ -5039,6 +5039,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  hazardLayer:
+    serializedVersion: 2
+    m_Bits: 128
   collisionRadius: 0.4
   wallCollisionRadius: 0.05
   isGrounded: 0

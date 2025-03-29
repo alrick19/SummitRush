@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3614251883228942774}
   - component: {fileID: 4146267322028463293}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5167435712736455582}
   - component: {fileID: 298601010054444376}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5908432621274937142}
   - component: {fileID: 2717254413378384874}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8372109331974704466}
   - component: {fileID: 1385239485372465827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,7 +359,7 @@ GameObject:
   - component: {fileID: 5340268984292097511}
   - component: {fileID: 7277913851112358072}
   - component: {fileID: 5130130565614790318}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LongSpikes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -433,13 +433,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 2.0098915, y: 0.03682798}
-      - {x: -1.3251735, y: 0.055936933}
-      - {x: -3.1923447, y: 0.03019458}
-      - {x: -3.4514937, y: -0.12039578}
-      - {x: -3.4409935, y: -0.48936403}
-      - {x: 2.2780719, y: -0.48144433}
-      - {x: 2.2796183, y: -0.116276205}
+    - - {x: 2.0566273, y: -0.020292938}
+      - {x: -3.2442722, y: -0.042504787}
+      - {x: -3.363216, y: -0.19309509}
+      - {x: -3.368295, y: -0.48936403}
+      - {x: 2.215757, y: -0.4970228}
+      - {x: 2.2173052, y: -0.15781868}
   m_UseDelaunayMesh: 0
 --- !u!114 &5130130565614790318
 MonoBehaviour:
@@ -463,7 +462,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5412610881677351553}
   - component: {fileID: 7161451855946298398}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -550,7 +549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7701916295395210839}
   - component: {fileID: 8708578756870750717}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

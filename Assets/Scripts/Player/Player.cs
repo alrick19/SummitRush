@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     private Collision collision;
     private AnimationScript anim;
     private DashTrail dashTrail;
-    
+
 
     [Header("Movement Stats")]
     public float moveSpeed = 10f; // max speed
@@ -35,6 +35,11 @@ public class Player : MonoBehaviour
     public float baseGravity = 6f; // stronger gravity when falling
     public float terminalVelocity = -20f;
     private const float ZERO_GRAVITY = 0f;
+
+    [Space]
+    [Header("Climb Timer")]
+    public float maxClimbTime = 5f;
+    public float currentClimbTime;
 
 
 
@@ -80,6 +85,7 @@ public class Player : MonoBehaviour
         }
 
         rb.gravityScale = baseGravity;
+        currentClimbTime = maxClimbTime;
     }
 
     private void Update()
@@ -95,7 +101,7 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         // check wall grabbing
-        if (collision.isWalled && InputManager.GetWallGrab())
+        if (collision.isWalled && InputManager.GetWallGrab() && currentClimbTime > 0f)
         {
             isGrabbing = true;
             isSliding = false;
@@ -166,16 +172,18 @@ public class Player : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
         }
+
+        HandleClimbTimer();
     }
     private void HandleLoopSFX()
     {
         bool isWalking = Mathf.Abs(horizontalMove) > 0.01f && collision.isGrounded && !isGrabbing && !isSliding && !isDashing;
         bool climbing = isGrabbing && verticalMove != 0;
         bool sliding = isSliding && !isGrabbing && rb.linearVelocity.y < -0.1f;
-        if (isWalking)  AudioManager.Instance.PlayLoop(AudioManager.Instance.walkLoop);
-        else if (climbing)   AudioManager.Instance.PlayLoop(AudioManager.Instance.wallClimbLoop);
-        else if (sliding)   AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
-        else    AudioManager.Instance.StopLoop();
+        if (isWalking) AudioManager.Instance.PlayLoop(AudioManager.Instance.walkLoop);
+        else if (climbing) AudioManager.Instance.PlayLoop(AudioManager.Instance.wallClimbLoop);
+        else if (sliding) AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
+        else AudioManager.Instance.StopLoop();
     }
 
     private void WallSlide()
@@ -198,7 +206,7 @@ public class Player : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(pushForce, -slideSpeed);
         }
-            
+
     }
 
     private void WallGrab()
@@ -213,6 +221,28 @@ public class Player : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, ascentSpeed * climbSpeed);
         }
 
+    }
+
+    private void HandleClimbTimer()
+    {
+        if (isGrabbing && !isDashing)
+        {
+            if (verticalMove > 0)
+                currentClimbTime -= 2 * Time.deltaTime; // climb time depletes twice as fast when climbing
+            else
+                currentClimbTime -= Time.deltaTime;
+
+            if (currentClimbTime <= 0f)
+            {
+                isGrabbing = false;
+                isSliding = true;
+                currentClimbTime = 0f;
+            }
+        }
+        else if (collision.isGrounded)
+        {
+            currentClimbTime = maxClimbTime;
+        }
     }
 
     private void BetterJump()
@@ -365,15 +395,15 @@ public class Player : MonoBehaviour
     {
         if (dashTrail != null)
             dashTrail.ShowTrail();
-    
+
         wallJumped = true;
         isDashing = true;
-    
+
         rb.gravityScale = ZERO_GRAVITY;
         rb.linearDamping = dashAirDrag;
-    
+
         yield return new WaitForSeconds(time);
-    
+
         rb.gravityScale = baseGravity;
         rb.linearDamping = 0;
         wallJumped = false;
