@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     [Space]
     [Header("Climb Timer")]
     public float maxClimbTime = 5f;
-    private float currentClimbTime;
+    public float currentClimbTime;
 
 
 

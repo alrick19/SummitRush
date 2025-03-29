@@ -61,6 +61,13 @@ public class KillPlayer : MonoBehaviour
 
         GameObject newPlayer = Instantiate(playerPrefab, respawnPosition, Quaternion.identity);
         LevelManager.Instance.SetPlayer(newPlayer);
+
+        PlayerUI ui = FindFirstObjectByType<PlayerUI>();
+        if (ui != null)
+        {
+            ui.SetPlayer(newPlayer.GetComponent<Player>());
+        }
+
         return newPlayer;
     }
 
