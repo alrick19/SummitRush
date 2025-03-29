@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3614251883228942774}
   - component: {fileID: 4146267322028463293}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5908432621274937142}
   - component: {fileID: 2717254413378384874}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 5340268984292097511}
   - component: {fileID: 7277913851112358072}
   - component: {fileID: 5130130565614790318}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spikes
   m_TagString: Untagged
   m_Icon: {fileID: 0}

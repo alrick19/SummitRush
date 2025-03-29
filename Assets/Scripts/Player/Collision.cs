@@ -4,6 +4,7 @@ public class Collision : MonoBehaviour
 {
     [Header("Collision Variables")]
     public LayerMask groundLayer;
+    public LayerMask hazardLayer;
     public float collisionRadius = 0.2f;
     public float wallCollisionRadius = 0.05f;
 
@@ -54,26 +55,39 @@ public class Collision : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
+        // ground & wall overlap circles
         Gizmos.DrawWireSphere((Vector2)transform.position + bottomOffset, collisionRadius);
         Gizmos.DrawWireSphere((Vector2)transform.position + rightOffset, wallCollisionRadius);
         Gizmos.DrawWireSphere((Vector2)transform.position + leftOffset, wallCollisionRadius);
+
+        // ledge overlap circles
+        Gizmos.DrawWireSphere((Vector2)transform.position + (rightOffset + new Vector2(0, 0.3f)), wallCollisionRadius);
+        Gizmos.DrawWireSphere((Vector2)transform.position + (leftOffset + new Vector2(0, 0.3f)), wallCollisionRadius);
+
+
     }
 
     private void CheckForLedge(bool rightWall, bool leftWall)
     {
-        Vector2 ledgeCheckOffset = new Vector2(0, 0.6f); // height above grab point
+        Vector2 ledgeCheckOffset = new Vector2(0, 0.3f); // height above grab point
         Vector2 rightCheck = (Vector2)transform.position + rightOffset + ledgeCheckOffset;
         Vector2 leftCheck = (Vector2)transform.position + leftOffset + ledgeCheckOffset;
 
         bool noTileAboveRight = !Physics2D.OverlapCircle(rightCheck, wallCollisionRadius, groundLayer);
         bool noTileAboveLeft = !Physics2D.OverlapCircle(leftCheck, wallCollisionRadius, groundLayer);
 
-        if (rightWall && noTileAboveRight)
+        // prevent ledging if there are spikes 
+        bool isHazardRight = Physics2D.OverlapCircle(rightCheck + new Vector2(0.5f, 0), wallCollisionRadius + 0.2f, hazardLayer);
+        bool isHazardLeft = Physics2D.OverlapCircle(leftCheck + new Vector2(-0.5f, 0), wallCollisionRadius + 0.2f, hazardLayer);
+
+
+
+        if (rightWall && noTileAboveRight && !isHazardRight)
         {
             onLedge = true;
             ledgePos = rightCheck;
         }
-        else if (leftWall && noTileAboveLeft)
+        else if (leftWall && noTileAboveLeft && !isHazardLeft)
         {
             onLedge = true;
             ledgePos = leftCheck;
