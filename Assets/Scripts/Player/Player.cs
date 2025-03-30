@@ -252,11 +252,8 @@ public class Player : MonoBehaviour
 
         if (bufferedJump && canJump && !isJumping)
         {
-            if (collision.isGrounded)
-            {
-                Jump(); // jump handled within grace periods
-                lastJumpInputTime = 0; // Reset jump buffer
-            }
+            Jump(); // jump handled within grace periods
+            lastJumpInputTime = 0; // Reset jump buffer
         }
 
         if (rb.linearVelocity.y > 0 && InputManager.GetJumpHeld() && Time.time - jumpStartTime <= maxJumpTime && !isDashing)
