@@ -24,9 +24,9 @@ public class KillPlayer : MonoBehaviour
 
         Destroy(player);
 
-        ResetRoom();
+        
         yield return new WaitForSeconds(0.5f);
-
+        ResetRoom();
         GameObject newPlayer = SpawnNewPlayer();
 
         UpdateAllCamerasFollowTarget(newPlayer.transform);
@@ -46,11 +46,11 @@ public class KillPlayer : MonoBehaviour
 
     private void ResetRoom()
     {
-        CameraRoomManager cameraRoomManager = GetComponentInParent<CameraRoomManager>();
-        if (cameraRoomManager != null)
+        CameraRoomManager room = LevelManager.Instance.GetCurrentRoom();
+        if (room != null)
         {
-            cameraRoomManager.ResetCollectibles();
-            cameraRoomManager.ResetHazards();
+            room.ResetCollectibles();
+            room.ResetHazards();
         }
     }
 

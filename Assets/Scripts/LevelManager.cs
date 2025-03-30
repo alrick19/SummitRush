@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Transform defaultRespawnPoint;
     private Vector2 currentRespawnPoint;
     private GameObject player;
+    private CameraRoomManager currentRoom;
 
     private void Awake()
     {
@@ -49,5 +50,15 @@ public class LevelManager : MonoBehaviour
     public void SetPlayer(GameObject newPlayer)
     {
         player = newPlayer;
+    }
+
+    public void SetCurrentRoom(CameraRoomManager room)
+    {
+        currentRoom = room;
+    }
+
+    public CameraRoomManager GetCurrentRoom()
+    {
+        return currentRoom;
     }
 }
