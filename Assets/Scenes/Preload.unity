@@ -564,7 +564,7 @@ MonoBehaviour:
   icicle: {fileID: 8300000, guid: ebf66ca5df2734c8a981276a4ff12b3e, type: 3}
   fallBlock: {fileID: 8300000, guid: eaab57d85f1a34f458f8c76e649b3c2a, type: 3}
   trampoline: {fileID: 8300000, guid: 385f4ba0702294b789ae8875c1f32c10, type: 3}
-  typing: {fileID: 8300000, guid: 5b92620d401264cf189800faaac8c3e3, type: 3}
+  typing: {fileID: 8300000, guid: f7bad0f6b33394db686f7a552410dace, type: 3}
 --- !u!4 &998017614
 Transform:
   m_ObjectHideFlags: 0
