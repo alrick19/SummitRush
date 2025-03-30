@@ -5,6 +5,7 @@ using System.Collections;
 public class PauseHandler : MonoBehaviour
 {
     public GameObject pauseMenuUI;
+    public GameObject settingsMenuUI;
     public Button resumeButton;
     public Button mainMenuButton;
     public Button quitButton;
@@ -39,7 +40,7 @@ public class PauseHandler : MonoBehaviour
         GameManager.Instance.PauseGame();
         pauseMenuUI.SetActive(true);
         InputManager.LockInput();
-        AudioManager.Instance.PauseLevelMusic();
+        //AudioManager.Instance.PauseLevelMusic();
     }
 
     public void Resume()
@@ -50,11 +51,12 @@ public class PauseHandler : MonoBehaviour
     private IEnumerator DelayedResume()
     {
         pauseMenuUI.SetActive(false);
+        settingsMenuUI.SetActive(false);
 
         yield return new WaitForSecondsRealtime(0.2f);
 
         GameManager.Instance.ResumeGame();
-        AudioManager.Instance.ResumeLevelMusic();
+        //AudioManager.Instance.ResumeLevelMusic();
 
         yield return null; 
 
