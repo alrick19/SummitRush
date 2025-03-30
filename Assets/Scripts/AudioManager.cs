@@ -11,10 +11,12 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     [Range(0f, 1f)] public float sfxVolume = 1f;
     [Range(0f, 1f)] public float loopSFXVolume = 1f;
 
+
     [Header("--- Audio Source ---")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource SFXSource;
     [SerializeField] private AudioSource loopingSFXSource;
+    [SerializeField] private AudioSource typingSFXSource;
     [SerializeField] private AudioSource ambientSource; //  like wind
 
     [Header("--- Level Music Clips ---")]
@@ -47,12 +49,14 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     public AudioClip icicle;//
     public AudioClip fallBlock;//
     public AudioClip trampoline;//
+    public AudioClip typing; 
     
 
 
     protected override void Awake()
     {
         base.Awake();
+        LoadSavedVolumeSettings();
 
         if (ambientSource == null)
         {
@@ -70,6 +74,7 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
         musicSource.volume = musicVolume;
         SFXSource.volume = sfxVolume;
         loopingSFXSource.volume = loopSFXVolume;
+        typingSFXSource.volume = loopSFXVolume;
         ambientSource.volume = ambientVolume;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -160,12 +165,15 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
 
     public void PlayLoop(AudioClip clip)
     {
-        if (clip == null || loopingSFXSource.clip == clip) return;
+        if (clip == null || loopingSFXSource == null) return;
 
-        loopingSFXSource.clip = clip;
-        loopingSFXSource.loop = true;
-        loopingSFXSource.Play();
-    }
+            if (loopingSFXSource.clip != clip || !loopingSFXSource.isPlaying)
+        {
+            loopingSFXSource.clip = clip;
+            loopingSFXSource.loop = true;
+            loopingSFXSource.Play();
+        }
+    }   
 
     public void StopLoop(AudioClip clip = null)
     {
@@ -176,5 +184,64 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
             loopingSFXSource.Stop();
             loopingSFXSource.clip = null;
         }
+    }
+
+    public void PlayTypingLoop(AudioClip clip)
+    {
+        if (clip == null || typingSFXSource == null) return;
+
+        typingSFXSource.clip = clip;
+        typingSFXSource.loop = true;
+        typingSFXSource.Play();
+    }
+
+    public void StopTypingLoop(AudioClip clip = null)
+    {
+        if (typingSFXSource == null) return;
+
+        if (clip == null || typingSFXSource.clip == clip)
+        {
+            typingSFXSource.Stop();
+            typingSFXSource.clip = null;
+        }
+    }
+
+
+    //for settings menu 
+
+    public void SetMusicVolume(float value)
+    {
+        musicVolume = value;
+        musicSource.volume = musicVolume;
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        sfxVolume = value;
+        SFXSource.volume = sfxVolume;
+        loopingSFXSource.volume = sfxVolume;
+        typingSFXSource.volume = sfxVolume;
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
+    }
+
+    public void SetAmbientVolume(float value)
+    {
+        ambientVolume = value;
+        ambientSource.volume = ambientVolume;
+        PlayerPrefs.SetFloat("AmbientVolume", ambientVolume);
+    }
+
+    private void LoadSavedVolumeSettings()
+    {
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", musicVolume);
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", sfxVolume);
+        ambientVolume = PlayerPrefs.GetFloat("AmbientVolume", ambientVolume);
+
+        musicSource.volume = musicVolume;
+        SFXSource.volume = sfxVolume;
+        loopingSFXSource.volume = sfxVolume;
+        typingSFXSource.volume = sfxVolume;
+        ambientSource.volume = ambientVolume;
     }
 }

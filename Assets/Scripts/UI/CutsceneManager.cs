@@ -34,6 +34,7 @@ public class CutsceneManager : MonoBehaviour
         currentLine = 0;
 
         dialogueUI.SetActive(true);
+
         typeCoroutine = StartCoroutine(TypeLine(lines[currentLine]));
 
         if (characterToShow != null)
@@ -51,6 +52,7 @@ public class CutsceneManager : MonoBehaviour
             StopCoroutine(typeCoroutine);
             dialogueText.text = lines[currentLine];
             isTyping = false;
+            AudioManager.Instance.StopTypingLoop();
             return;
         }
 
@@ -82,12 +84,13 @@ public class CutsceneManager : MonoBehaviour
     {
         isTyping = true;
         dialogueText.text = "";
-
+        AudioManager.Instance.PlayTypingLoop(AudioManager.Instance.typing);
         foreach (char c in line)
         {
             dialogueText.text += c;
             yield return new WaitForSeconds(0.02f); // ttyping speed
         }
+        AudioManager.Instance.StopTypingLoop();
 
         isTyping = false;
     }

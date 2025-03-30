@@ -102,7 +102,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
     public void ContinueGame()
     {
         int levelToLoad = Mathf.Clamp(unlockedLevelIndex, 0, SceneManager.sceneCountInBuildSettings - 1);
-        SceneHandler.Instance.LoadScene(SceneUtility.GetScenePathByBuildIndex(levelToLoad));
+        SceneHandler.Instance.LoadScene(GetSceneNameFromBuildIndex(levelToLoad));    
     }
 
     private string GetSceneNameFromBuildIndex(int buildIndex)
