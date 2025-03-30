@@ -56,6 +56,7 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
     protected override void Awake()
     {
         base.Awake();
+        LoadSavedVolumeSettings();
 
         if (ambientSource == null)
         {
@@ -203,5 +204,44 @@ public class AudioManager : SingletonMonoBehavior<AudioManager>
             typingSFXSource.Stop();
             typingSFXSource.clip = null;
         }
+    }
+
+
+    //for settings menu 
+
+    public void SetMusicVolume(float value)
+    {
+        musicVolume = value;
+        musicSource.volume = musicVolume;
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        sfxVolume = value;
+        SFXSource.volume = sfxVolume;
+        loopingSFXSource.volume = sfxVolume;
+        typingSFXSource.volume = sfxVolume;
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
+    }
+
+    public void SetAmbientVolume(float value)
+    {
+        ambientVolume = value;
+        ambientSource.volume = ambientVolume;
+        PlayerPrefs.SetFloat("AmbientVolume", ambientVolume);
+    }
+
+    private void LoadSavedVolumeSettings()
+    {
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", musicVolume);
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", sfxVolume);
+        ambientVolume = PlayerPrefs.GetFloat("AmbientVolume", ambientVolume);
+
+        musicSource.volume = musicVolume;
+        SFXSource.volume = sfxVolume;
+        loopingSFXSource.volume = sfxVolume;
+        typingSFXSource.volume = sfxVolume;
+        ambientSource.volume = ambientVolume;
     }
 }
