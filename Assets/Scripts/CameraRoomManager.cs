@@ -38,7 +38,8 @@ public class CameraRoomManager : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !other.isTrigger)
-        {
+        { 
+            LevelManager.Instance.SetCurrentRoom(this);
             virtualCam.gameObject.SetActive(true);
             virtualCam.Follow = other.transform;
             virtualCam.LookAt = other.transform;
