@@ -182,7 +182,10 @@ public class Player : MonoBehaviour
         bool sliding = isSliding && !isGrabbing && rb.linearVelocity.y < -0.1f;
         if (isWalking) AudioManager.Instance.PlayLoop(AudioManager.Instance.walkLoop);
         else if (climbing) AudioManager.Instance.PlayLoop(AudioManager.Instance.wallClimbLoop);
-        else if (sliding) AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
+        else if (sliding)
+        {
+            AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
+        }
         else AudioManager.Instance.StopLoop();
     }
 
@@ -425,7 +428,7 @@ public class Player : MonoBehaviour
 
         // set Dashing Velocity
         rb.linearVelocity += dir.normalized * dashSpeed;
-        StartCoroutine(DashTime(0.3f));
+        StartCoroutine(DashTime(0.37f));
     }
 
     public void ResetDash()
