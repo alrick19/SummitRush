@@ -12,6 +12,7 @@ public class KillPlayer : MonoBehaviour
         if (other.gameObject.CompareTag("Player") && !isRespawning)
         {
             AudioManager.Instance.PlaySFX(AudioManager.Instance.death);
+            other.gameObject.GetComponent<Player>()?.DeathEffect();
             StartCoroutine(RespawnPlayer(other.gameObject));
         }
     }
@@ -24,7 +25,7 @@ public class KillPlayer : MonoBehaviour
 
         Destroy(player);
 
-        
+
         yield return new WaitForSeconds(0.5f);
         ResetRoom();
         GameObject newPlayer = SpawnNewPlayer();

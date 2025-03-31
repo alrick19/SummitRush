@@ -13,9 +13,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
 
     protected override void Awake()
     {
-        base.Awake(); 
-        //PlayerPrefs.DeleteAll(); //REMOVE IN BUILD. DEV ONLY TO RESET
-        //PlayerPrefs.Save(); 
+        base.Awake();  
         unlockedLevelIndex = PlayerPrefs.GetInt("UnlockedLevelIndex", 2);//level 1 defualt.
     }
 
@@ -94,7 +92,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
 
     public void StartNewGame()
     {
-        PlayerPrefs.SetInt("UnlockedLevelIndex", 0);
+        PlayerPrefs.SetInt("UnlockedLevelIndex", 2);
         PlayerPrefs.Save();
         SceneHandler.Instance.LoadScene("Level1");
     }

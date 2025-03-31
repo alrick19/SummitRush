@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -51,7 +52,7 @@ public class Player : MonoBehaviour
     private bool wallJumped;
     public bool isJumping;
     public bool isDashing;
-    private bool hasDashed;
+    public bool hasDashed;
 
     [Space]
     [Header("Movement Input")]
@@ -67,9 +68,12 @@ public class Player : MonoBehaviour
     [Space]
     [Header("Special Effects")]
     public ParticleSystem jumpParticle;
+    public ParticleSystem slideParticle;
+    public ParticleSystem deathParticle;
 
 
     private bool wasGroundedLastFrame = false;
+    private Coroutine dashCoroutine;
 
 
     private void Awake()
@@ -166,11 +170,21 @@ public class Player : MonoBehaviour
         }
 
         CheckGrounded();
+        WallParticles();
 
         // Add terminal velocity
         if (rb.linearVelocity.y < terminalVelocity && !isDashing)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
+            if (verticalMove < -0.1)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity - 5f);
+
+            }
+            else
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
+
+            }
         }
 
         HandleClimbTimer();
@@ -182,7 +196,10 @@ public class Player : MonoBehaviour
         bool sliding = isSliding && !isGrabbing && rb.linearVelocity.y < -0.1f;
         if (isWalking) AudioManager.Instance.PlayLoop(AudioManager.Instance.walkLoop);
         else if (climbing) AudioManager.Instance.PlayLoop(AudioManager.Instance.wallClimbLoop);
-        else if (sliding) AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
+        else if (sliding)
+        {
+            AudioManager.Instance.PlayLoop(AudioManager.Instance.wallSlideLoop);
+        }
         else AudioManager.Instance.StopLoop();
     }
 
@@ -204,6 +221,7 @@ public class Player : MonoBehaviour
         }
         if (isSliding /* && !collision.isGrounded */)
         {
+
             rb.linearVelocity = new Vector2(pushForce, -slideSpeed);
         }
 
@@ -252,11 +270,8 @@ public class Player : MonoBehaviour
 
         if (bufferedJump && canJump && !isJumping)
         {
-            if (collision.isGrounded)
-            {
-                Jump(); // jump handled within grace periods
-                lastJumpInputTime = 0; // Reset jump buffer
-            }
+            Jump(); // jump handled within grace periods
+            lastJumpInputTime = 0; // Reset jump buffer
         }
 
         if (rb.linearVelocity.y > 0 && InputManager.GetJumpHeld() && Time.time - jumpStartTime <= maxJumpTime && !isDashing)
@@ -300,6 +315,25 @@ public class Player : MonoBehaviour
 
         // sets wall Jumped to true then false after .2s
         StartCoroutine(WallJumpingTime(0.3f));
+    }
+
+    private void WallParticles()
+    {
+        if (rb.linearVelocity.y < -0.1 && (isGrabbing || isSliding) && !isDashing)
+        {
+            Vector3 scale = slideParticle.transform.localPosition;
+            float side = anim.sprite.flipX ? 1 : -1;
+            scale.x = Mathf.Abs(scale.x) * side;
+            slideParticle.transform.localPosition = scale;
+
+            if (!slideParticle.isPlaying)
+                slideParticle.Play();
+        }
+        else
+        {
+            if (slideParticle.isPlaying)
+                slideParticle.Stop();
+        }
     }
 
     /// <summary>
@@ -428,11 +462,39 @@ public class Player : MonoBehaviour
 
         // set Dashing Velocity
         rb.linearVelocity += dir.normalized * dashSpeed;
+
+        if (dashCoroutine != null)
+        {
+            StopCoroutine(dashCoroutine);
+        }
+
         StartCoroutine(DashTime(0.3f));
     }
 
     public void ResetDash()
     {
         hasDashed = false;
+
+        if (dashCoroutine != null)
+        {
+            StopCoroutine(dashCoroutine);
+            dashCoroutine = null;
+            isDashing = false;
+            wallJumped = false;
+
+            rb.gravityScale = baseGravity;
+            rb.linearDamping = 0;
+        }
+    }
+
+    public void DeathEffect()
+    {
+        if (!deathParticle.isPlaying)
+        {
+            deathParticle.transform.SetParent(null); // detach particle before destroying player 
+
+            deathParticle.Play();
+            Destroy(deathParticle.gameObject, deathParticle.main.duration);
+        }
     }
 }

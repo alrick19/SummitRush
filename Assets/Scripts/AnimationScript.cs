@@ -1,20 +1,20 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class AnimationScript : BaseAnimationScript
 {
-    [SerializeField] private ParticleSystem runDust;
-
     private Animator anim;
     private Player playerMove;
     private Collision coll;
     private float verticalVelocity;
+    [SerializeField] public Light2D dashLight;
 
     void Awake()
     {
         anim = GetComponent<Animator>();
         playerMove = GetComponentInParent<Player>();
         coll = GetComponentInParent<Collision>();
-        sprite = GetComponent<SpriteRenderer>(); 
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -29,7 +29,9 @@ public class AnimationScript : BaseAnimationScript
         anim.SetBool("isGrounded", coll.isGrounded);
         anim.SetBool("isSliding", playerMove.isSliding);
         HandleSpriteFlip();
-        RunParticle();
+        HandleDashLight();
+        HandleLightFlip();
+
     }
 
     public void HandleSpriteFlip()
@@ -40,28 +42,44 @@ public class AnimationScript : BaseAnimationScript
         if (playerMove.horizontalMove > 0.01f)
         {
             sprite.flipX = true;
-            FlipRunParticle(true);
         }
         else if (playerMove.horizontalMove < -0.01f)
         {
             sprite.flipX = false;
-            FlipRunParticle(false);
         }
     }
 
-    private void RunParticle()
+    private void HandleDashLight()
     {
-        bool isRunning = playerMove.horizontalMove != 0;
-        if (coll.isGrounded && isRunning)
+        if (playerMove.hasDashed)
         {
-            if (!runDust.isEmitting)
-                runDust.Play();
+            if (dashLight.enabled)
+                dashLight.enabled = false;
         }
         else
         {
-            if (runDust.isEmitting)
-                runDust.Stop();
+            if (!dashLight.enabled)
+                dashLight.enabled = true;
         }
+    }
+
+    private void HandleLightFlip()
+    {
+        if (playerMove.isGrabbing && (coll.rightWalled || coll.leftWalled))
+            return;
+
+        Vector3 scale = dashLight.transform.localScale;
+
+        if (playerMove.horizontalMove > 0.01f)
+        {
+            scale.x = -Mathf.Abs(scale.x);
+        }
+        else if (playerMove.horizontalMove < -0.01f)
+        {
+            scale.x = Mathf.Abs(scale.x);
+        }
+
+        dashLight.transform.localScale = scale;
     }
 
     public void SetTrigger(string trigger)
@@ -69,17 +87,4 @@ public class AnimationScript : BaseAnimationScript
         anim.SetTrigger(trigger);
     }
 
-    private void FlipRunParticle(bool lookingRight)
-    {
-        if (lookingRight)
-        {
-            runDust.transform.localPosition = new Vector3(-0.85f, -0.75f, 0);
-            runDust.transform.localEulerAngles = new Vector3(0, 0, 90);
-        }
-        else
-        {
-            runDust.transform.localPosition = new Vector3(0.85f, -0.75f, 0);
-            runDust.transform.localEulerAngles = new Vector3(0, 0, 0);
-        }
-    }
 }

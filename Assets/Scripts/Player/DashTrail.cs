@@ -16,7 +16,7 @@ public class DashTrail : MonoBehaviour
     public ParticleSystem dashParticle;
 
     [Header("Afterimage Setup")]
-    public GameObject afterImagePrefab; 
+    public GameObject afterImagePrefab;
     public int poolSize = 5;
 
     private List<GameObject> pool = new List<GameObject>();
@@ -85,7 +85,7 @@ public class DashTrail : MonoBehaviour
                 if (afterImage != null && this != null)
                 {
                     afterImage.SetActive(false);
-                    afterImage.transform.SetParent(transform); 
+                    afterImage.transform.SetParent(transform);
                 }
             });
 
