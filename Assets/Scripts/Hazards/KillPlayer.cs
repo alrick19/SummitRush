@@ -24,7 +24,7 @@ public class KillPlayer : MonoBehaviour
 
         Destroy(player);
 
-        
+
         yield return new WaitForSeconds(0.5f);
         ResetRoom();
         GameObject newPlayer = SpawnNewPlayer();

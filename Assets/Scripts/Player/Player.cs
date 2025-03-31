@@ -69,9 +69,11 @@ public class Player : MonoBehaviour
     [Header("Special Effects")]
     public ParticleSystem jumpParticle;
     public ParticleSystem slideParticle;
+    private ParticleSystem deathParticle;
 
 
     private bool wasGroundedLastFrame = false;
+    private Coroutine dashCoroutine;
 
 
     private void Awake()
@@ -460,11 +462,28 @@ public class Player : MonoBehaviour
 
         // set Dashing Velocity
         rb.linearVelocity += dir.normalized * dashSpeed;
+
+        if (dashCoroutine != null)
+        {
+            StopCoroutine(dashCoroutine);
+        }
+
         StartCoroutine(DashTime(0.3f));
     }
 
     public void ResetDash()
     {
         hasDashed = false;
+
+        if (dashCoroutine != null)
+        {
+            StopCoroutine(dashCoroutine);
+            dashCoroutine = null;
+            isDashing = false;
+            wallJumped = false;
+
+            rb.gravityScale = baseGravity;
+            rb.linearDamping = 0;
+        }
     }
 }
