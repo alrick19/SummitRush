@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
     [Header("Special Effects")]
     public ParticleSystem jumpParticle;
     public ParticleSystem slideParticle;
-    private ParticleSystem deathParticle;
+    public ParticleSystem deathParticle;
 
 
     private bool wasGroundedLastFrame = false;
@@ -484,6 +484,17 @@ public class Player : MonoBehaviour
 
             rb.gravityScale = baseGravity;
             rb.linearDamping = 0;
+        }
+    }
+
+    public void DeathEffect()
+    {
+        if (!deathParticle.isPlaying)
+        {
+            deathParticle.transform.SetParent(null); // detach particle before destroying player 
+
+            deathParticle.Play();
+            Destroy(deathParticle.gameObject, deathParticle.main.duration);
         }
     }
 }
