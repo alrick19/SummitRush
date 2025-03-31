@@ -15,6 +15,13 @@ public class CutsceneManager : MonoBehaviour
     private Coroutine typeCoroutine;
     private bool isTyping = false;
 
+    private RollCredits creditsManager;
+
+    private void Awake()
+    {
+        creditsManager = FindFirstObjectByType<RollCredits>();
+    }
+
     private void Update()
     {
         if (!isCutsceneActive) return;
@@ -75,6 +82,11 @@ public class CutsceneManager : MonoBehaviour
 
         if (characterVisual) characterVisual.SetActive(false);
 
+        
+        if (CompareTag("FinalCutscene") && creditsManager != null)
+        {
+            creditsManager.ShowCredits(); return;
+        }
         InputManager.UnlockInput();
     }
 
