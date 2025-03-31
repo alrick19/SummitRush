@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -67,6 +68,7 @@ public class Player : MonoBehaviour
     [Space]
     [Header("Special Effects")]
     public ParticleSystem jumpParticle;
+    public ParticleSystem slideParticle;
 
 
     private bool wasGroundedLastFrame = false;
@@ -166,11 +168,21 @@ public class Player : MonoBehaviour
         }
 
         CheckGrounded();
+        WallParticles();
 
         // Add terminal velocity
         if (rb.linearVelocity.y < terminalVelocity && !isDashing)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
+            if (verticalMove < -0.1)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity - 5f);
+
+            }
+            else
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, terminalVelocity);
+
+            }
         }
 
         HandleClimbTimer();
@@ -207,6 +219,7 @@ public class Player : MonoBehaviour
         }
         if (isSliding /* && !collision.isGrounded */)
         {
+
             rb.linearVelocity = new Vector2(pushForce, -slideSpeed);
         }
 
@@ -300,6 +313,25 @@ public class Player : MonoBehaviour
 
         // sets wall Jumped to true then false after .2s
         StartCoroutine(WallJumpingTime(0.3f));
+    }
+
+    private void WallParticles()
+    {
+        if (rb.linearVelocity.y < -0.1 && (isGrabbing || isSliding) && !isDashing)
+        {
+            Vector3 scale = slideParticle.transform.localPosition;
+            float side = anim.sprite.flipX ? 1 : -1;
+            scale.x = Mathf.Abs(scale.x) * side;
+            slideParticle.transform.localPosition = scale;
+
+            if (!slideParticle.isPlaying)
+                slideParticle.Play();
+        }
+        else
+        {
+            if (slideParticle.isPlaying)
+                slideParticle.Stop();
+        }
     }
 
     /// <summary>

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimationScript : BaseAnimationScript
 {
-    [SerializeField] private ParticleSystem runDust;
+    // [SerializeField] private ParticleSystem runDust;
 
     private Animator anim;
     private Player playerMove;
@@ -14,7 +14,7 @@ public class AnimationScript : BaseAnimationScript
         anim = GetComponent<Animator>();
         playerMove = GetComponentInParent<Player>();
         coll = GetComponentInParent<Collision>();
-        sprite = GetComponent<SpriteRenderer>(); 
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -40,12 +40,12 @@ public class AnimationScript : BaseAnimationScript
         if (playerMove.horizontalMove > 0.01f)
         {
             sprite.flipX = true;
-            FlipRunParticle(true);
+            // FlipRunParticle(true);
         }
         else if (playerMove.horizontalMove < -0.01f)
         {
             sprite.flipX = false;
-            FlipRunParticle(false);
+            // FlipRunParticle(false);
         }
     }
 
@@ -54,13 +54,13 @@ public class AnimationScript : BaseAnimationScript
         bool isRunning = playerMove.horizontalMove != 0;
         if (coll.isGrounded && isRunning)
         {
-            if (!runDust.isEmitting)
-                runDust.Play();
+            // if (!runDust.isEmitting)
+            //     runDust.Play();
         }
         else
         {
-            if (runDust.isEmitting)
-                runDust.Stop();
+            // if (runDust.isEmitting)
+            //     runDust.Stop();
         }
     }
 
@@ -69,17 +69,17 @@ public class AnimationScript : BaseAnimationScript
         anim.SetTrigger(trigger);
     }
 
-    private void FlipRunParticle(bool lookingRight)
-    {
-        if (lookingRight)
-        {
-            runDust.transform.localPosition = new Vector3(-0.85f, -0.75f, 0);
-            runDust.transform.localEulerAngles = new Vector3(0, 0, 90);
-        }
-        else
-        {
-            runDust.transform.localPosition = new Vector3(0.85f, -0.75f, 0);
-            runDust.transform.localEulerAngles = new Vector3(0, 0, 0);
-        }
-    }
+    // private void FlipRunParticle(bool lookingRight)
+    // {
+    //     if (lookingRight)
+    //     {
+    //         runDust.transform.localPosition = new Vector3(-0.85f, -0.75f, 0);
+    //         runDust.transform.localEulerAngles = new Vector3(0, 0, 90);
+    //     }
+    //     else
+    //     {
+    //         runDust.transform.localPosition = new Vector3(0.85f, -0.75f, 0);
+    //         runDust.transform.localEulerAngles = new Vector3(0, 0, 0);
+    //     }
+    // }
 }
