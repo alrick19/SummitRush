@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class AnimationScript : BaseAnimationScript
 {
-    // [SerializeField] private ParticleSystem runDust;
-
     private Animator anim;
     private Player playerMove;
     private Collision coll;
@@ -29,7 +27,6 @@ public class AnimationScript : BaseAnimationScript
         anim.SetBool("isGrounded", coll.isGrounded);
         anim.SetBool("isSliding", playerMove.isSliding);
         HandleSpriteFlip();
-        RunParticle();
     }
 
     public void HandleSpriteFlip()
@@ -40,27 +37,10 @@ public class AnimationScript : BaseAnimationScript
         if (playerMove.horizontalMove > 0.01f)
         {
             sprite.flipX = true;
-            // FlipRunParticle(true);
         }
         else if (playerMove.horizontalMove < -0.01f)
         {
             sprite.flipX = false;
-            // FlipRunParticle(false);
-        }
-    }
-
-    private void RunParticle()
-    {
-        bool isRunning = playerMove.horizontalMove != 0;
-        if (coll.isGrounded && isRunning)
-        {
-            // if (!runDust.isEmitting)
-            //     runDust.Play();
-        }
-        else
-        {
-            // if (runDust.isEmitting)
-            //     runDust.Stop();
         }
     }
 
@@ -68,18 +48,4 @@ public class AnimationScript : BaseAnimationScript
     {
         anim.SetTrigger(trigger);
     }
-
-    // private void FlipRunParticle(bool lookingRight)
-    // {
-    //     if (lookingRight)
-    //     {
-    //         runDust.transform.localPosition = new Vector3(-0.85f, -0.75f, 0);
-    //         runDust.transform.localEulerAngles = new Vector3(0, 0, 90);
-    //     }
-    //     else
-    //     {
-    //         runDust.transform.localPosition = new Vector3(0.85f, -0.75f, 0);
-    //         runDust.transform.localEulerAngles = new Vector3(0, 0, 0);
-    //     }
-    // }
 }
