@@ -1526,8 +1526,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -248}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -2, y: -263}
+  m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &285150828
 PrefabInstance:
@@ -2193,7 +2193,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -306}
+  m_AnchoredPosition: {x: 0, y: -351}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &330032022
@@ -2427,7 +2427,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -6}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &399619273
@@ -3306,11 +3306,11 @@ PrefabInstance:
       objectReference: {fileID: -8809873816130030523, guid: a1e0c439f2db2416da235fb885ff8c2a, type: 3}
     - target: {fileID: 7043311006569331710, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.04
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 7043311006569331710, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.05
+      value: -8.1
       objectReference: {fileID: 0}
     - target: {fileID: 7043311006569331710, guid: fc1c2cb7f1ebf4918aff4a212960baaa, type: 3}
       propertyPath: m_LocalPosition.z
@@ -68689,7 +68689,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Concoria Studio
+  m_text: Concordia Studio
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c9414db31e1a64bf38f1a74d399d1a8d, type: 2}
   m_sharedMaterial: {fileID: 4549958140658767228, guid: c9414db31e1a64bf38f1a74d399d1a8d, type: 2}

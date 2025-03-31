@@ -19,7 +19,7 @@ public class RollCredits : MonoBehaviour
     public void ShowCredits()
     {
         creditsPanel.SetActive(true);
-        creditsContent.anchoredPosition = new Vector2(0, -Screen.height);
+        creditsContent.anchoredPosition = new Vector2(0, -Screen.height / 2);
         StartCoroutine(ScrollCredits());
     }
 
@@ -27,7 +27,7 @@ public class RollCredits : MonoBehaviour
     {
         yield return new WaitForSeconds(delayBeforeScroll);
 
-        while (creditsContent.anchoredPosition.y < creditsContent.sizeDelta.y + 2 * Screen.height)
+        while (creditsContent.anchoredPosition.y < creditsContent.sizeDelta.y + (4 * Screen.height))
         {
             creditsContent.anchoredPosition += Vector2.up * scrollSpeed * Time.deltaTime;
             yield return null;
