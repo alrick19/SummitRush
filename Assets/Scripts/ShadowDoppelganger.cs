@@ -78,6 +78,8 @@ public class ShadowDoppelganger : MonoBehaviour
             KillPlayer killPlayer = FindAnyObjectByType<KillPlayer>();
             if (killPlayer != null)
             {
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.death);
+                other.gameObject.GetComponent<Player>()?.DeathEffect();
                 StartCoroutine(killPlayer.RespawnPlayer(other.gameObject));
             }
         }
