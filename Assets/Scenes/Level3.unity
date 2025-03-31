@@ -881,7 +881,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3215388120594505890, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
       propertyPath: 'dialogueLines.Array.data[0]'
-      value: Welcome to the sub-peak! You are turning out to be quiet the climber.
+      value: Welcome to the sub-peak! You are turning out to be quite the climber.
         ....
       objectReference: {fileID: 0}
     - target: {fileID: 3215388120594505890, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
@@ -891,7 +891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3215388120594505890, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
       propertyPath: 'dialogueLines.Array.data[2]'
-      value: I'll Give you some time for your stomach to settle, but if you wish
+      value: I'll give you some time for your stomach to settle, but if you wish
         to reach the summit, you will have to race me....
       objectReference: {fileID: 0}
     - target: {fileID: 3215388120594505890, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
@@ -902,6 +902,18 @@ PrefabInstance:
     - target: {fileID: 3309055130732277491, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4190477757726773258, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4190477757726773258, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 960
+      objectReference: {fileID: 0}
+    - target: {fileID: 4190477757726773258, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 540
       objectReference: {fileID: 0}
     - target: {fileID: 4263511059219045070, guid: 432f8bd92ba374bb88347227994c0ca8, type: 3}
       propertyPath: m_Name
@@ -62700,19 +62712,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3212754022212802444, guid: 4752b995b1c714e5db52b521563fa66b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
-      value: -18.6684
+      value: -19.87535
       objectReference: {fileID: 0}
     - target: {fileID: 3212754022212802444, guid: 4752b995b1c714e5db52b521563fa66b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
-      value: 23.30815
+      value: 23.15727
       objectReference: {fileID: 0}
     - target: {fileID: 3212754022212802444, guid: 4752b995b1c714e5db52b521563fa66b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
-      value: -18.468403
+      value: -19.826221
       objectReference: {fileID: 0}
     - target: {fileID: 3212754022212802444, guid: 4752b995b1c714e5db52b521563fa66b, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
-      value: -26.576004
+      value: -26.726883
       objectReference: {fileID: 0}
     - target: {fileID: 5135190917543275275, guid: 4752b995b1c714e5db52b521563fa66b, type: 3}
       propertyPath: FollowOffset.y
