@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
     private bool wallJumped;
     public bool isJumping;
     public bool isDashing;
-    private bool hasDashed;
+    public bool hasDashed;
 
     [Space]
     [Header("Movement Input")]
@@ -460,7 +460,7 @@ public class Player : MonoBehaviour
 
         // set Dashing Velocity
         rb.linearVelocity += dir.normalized * dashSpeed;
-        StartCoroutine(DashTime(0.37f));
+        StartCoroutine(DashTime(0.3f));
     }
 
     public void ResetDash()

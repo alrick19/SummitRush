@@ -28,6 +28,15 @@ public class FallingBlock : MonoBehaviour, IResettableHazard
         }
     }
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && !hasFallen)
+        {
+            StartCoroutine(FallSequence());
+
+        }
+    }
+
     private IEnumerator FallSequence()
     {
         // yield return new WaitForSeconds(0.5f); // Wait before shake
