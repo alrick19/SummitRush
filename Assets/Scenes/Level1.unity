@@ -695,6 +695,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 5187164324554266532, guid: a99191bb0f0734dce8c8cf36ee7d5cc2, type: 3}
+      propertyPath: newRespawnPoint
+      value: 
+      objectReference: {fileID: 2072794182}
     - target: {fileID: 7829788908021964955, guid: a99191bb0f0734dce8c8cf36ee7d5cc2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 20.43
@@ -64118,6 +64122,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 1.4066613
       objectReference: {fileID: 0}
+    - target: {fileID: 5187164324554266532, guid: a99191bb0f0734dce8c8cf36ee7d5cc2, type: 3}
+      propertyPath: newRespawnPoint
+      value: 
+      objectReference: {fileID: 2013160636}
     - target: {fileID: 7829788908021964955, guid: a99191bb0f0734dce8c8cf36ee7d5cc2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17
