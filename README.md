@@ -25,4 +25,4 @@ Find our [design document here](Group%2033%20Design%20Document.pdf)
 
 All of our sprites and tiles were hand-made using [Aseprite](https://www.aseprite.org) and can be found in the [Sprites folder](/Assets/Sprites/)
 
-Made with ❤️ by Group 33 – Concordia Studio  
+Made with ❤️ by Group 33 – Concordia Studio (Will & Alrick)
