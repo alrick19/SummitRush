@@ -9990,7 +9990,7 @@ MonoBehaviour:
   maxJumpTime: 0.2
   dashSpeed: 100
   dashAirDrag: 15
-  holdJumpGravity: 1
+  holdJumpGravity: 0.6
   baseGravity: 5
   terminalVelocity: -13
   maxClimbTime: 5

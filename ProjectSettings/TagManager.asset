@@ -9,6 +9,7 @@ TagManager:
   - Collectible
   - LoadingText
   - InitialSpawn
+  - FinalCutscene
   layers:
   - Default
   - TransparentFX
